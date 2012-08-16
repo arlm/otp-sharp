@@ -152,7 +152,7 @@ namespace OtpSharp
         /// </summary>
         public string GetKeyUrl(string user)
         {
-            if (string.IsNullOrWhiteSpace(user))
+            if (string.IsNullOrEmpty(user))
                 throw new ArgumentNullException("The user must be provided");
 
             var url = this.GetBaseKeyUrl(user);
