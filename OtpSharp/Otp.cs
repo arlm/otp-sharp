@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
@@ -46,9 +45,11 @@ namespace OtpSharp
         {
             var hmacHasher = CreateHmacHasher(secretKey, mode);
             byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
+
             // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
-            // hmacComputedHash[19] => hmacComputedHash.Last()
-            int offset = hmacComputedHash.Last() & 0x0F;
+            // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
+
+            int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
             return (hmacComputedHash[offset] & 0x7f) << 24
                 | (hmacComputedHash[offset + 1] & 0xff) << 16
                 | (hmacComputedHash[offset + 2] & 0xff) << 8
@@ -81,7 +82,9 @@ namespace OtpSharp
         protected internal byte[] GetBigEndianBytes(long input)
         {
             // Since .net uses little endian numbers, we need to reverse the byte order to get big endian.
-            return BitConverter.GetBytes(input).Reverse().ToArray();
+            var data = BitConverter.GetBytes(input);
+            Array.Reverse(data);
+            return data;
         }
 
         /// <summary>

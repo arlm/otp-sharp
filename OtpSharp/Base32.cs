@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace OtpSharp
@@ -93,8 +92,11 @@ namespace OtpSharp
 
             var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
 
-            if (!unpaddedBase32.All(c => encodingChars.Contains(c)))
-                throw new ArgumentException("The input string contained illegal characters");
+            foreach (var c in unpaddedBase32)
+            {
+                if (encodingChars.IndexOf(c) < 0)
+                    throw new ArgumentException("The input string contained illegal characters");
+            }
 
             // we have already removed the padding so this will tell us how many actual bytes there should be
             int outputByteCount = unpaddedBase32.Length * encodedBitCount / byteBitCount;
