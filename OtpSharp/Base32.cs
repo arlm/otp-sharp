@@ -91,7 +91,7 @@ namespace OtpSharp
             if (string.IsNullOrEmpty(base32))
                 throw new ArgumentNullException("Must provide a base 32 string as input");
 
-            var unpaddedBase32 = base32.TrimEnd('=');
+            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
 
             if (!unpaddedBase32.All(c => encodingChars.Contains(c)))
                 throw new ArgumentException("The input string contained illegal characters");

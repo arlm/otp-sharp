@@ -15,7 +15,13 @@
     <base64>MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=</base64>
     <base32Unpadded>GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ</base32Unpadded>
   </Row>
-  
+
+  <Row>
+    <!-- RFC test key with mixed case-->
+    <base32>gezDGNBVGY3TQOJqGEZdGNBvGY3TQOJQ</base32>
+    <base64>MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=</base64>
+    <base32Unpadded>gezDGNBVGY3TQOJqGEZdGNBvGY3TQOJQ</base32Unpadded>
+  </Row>
   
   <!-- The remainder are from RFC 4648 Section 10 http://tools.ietf.org/html/rfc4648#section-10 -->
   <Row>

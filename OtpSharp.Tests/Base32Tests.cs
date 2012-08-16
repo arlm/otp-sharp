@@ -15,7 +15,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void Base32Encoding()
         {
-            var base32 = this.TestContext.DataRow["base32"].ToString();
+            var base32 = this.TestContext.DataRow["base32"].ToString().ToUpperInvariant();
             var base64 = this.TestContext.DataRow["base64"].ToString();
 
             var sourceData = Convert.FromBase64String(base64);
