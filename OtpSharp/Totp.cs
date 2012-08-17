@@ -146,6 +146,8 @@ namespace OtpSharp
         /// </summary>
         protected override string OtpType { get { return "totp"; } }
 
+#if NO_WEB
+#else
         /// <summary>
         /// Gets a URL that conforms to the de-facto standard
         /// created and used by Google
@@ -173,5 +175,6 @@ namespace OtpSharp
 
             return url;
         }
+#endif
     }
 }

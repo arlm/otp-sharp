@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
+#if NO_WEB
+#else
 using System.Web;
+#endif
 
 namespace OtpSharp
 {
@@ -121,6 +124,9 @@ namespace OtpSharp
             return false;
         }
 
+#if NO_WEB
+#else
+
         /// <summary>
         /// Gets a URL that conforms to the de-facto standard
         /// created and used by Google
@@ -129,7 +135,7 @@ namespace OtpSharp
         {
             return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKey));
         }
-
+#endif
         /// <summary>
         /// Used in generating URLs
         /// </summary>
