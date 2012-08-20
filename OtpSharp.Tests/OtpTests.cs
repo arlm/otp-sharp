@@ -55,17 +55,10 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ContractTestKeySizeDelegate_Empty()
-        {
-            var t = new Totp(() => new byte[] { });
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Zero()
         {
-            var t = new Totp(rfcTestKey, step: 0);
+            var t = new Totp(rfcTestKey, step:0);
         }
 
         [TestMethod]
@@ -85,7 +78,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Zero()
         {
-            var t = new Totp(rfcTestKey, totpSize: 0);
+            var t = new Totp(rfcTestKey, totpSize:0);
         }
 
         [TestMethod]
@@ -101,7 +94,7 @@ namespace OtpSharp.Tests
         {
             var t = new Totp(rfcTestKey, totpSize: 11);
         }
-
+        
         [TestMethod]
         public void Digits_Ten()
         {
@@ -159,27 +152,6 @@ namespace OtpSharp.Tests
             GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
 
             var totpCalculator = new Totp(key, mode: mode, totpSize: 8);
-            var hotp = totpCalculator.ComputeTotp(time);
-
-            Assert.AreEqual(expectedResult, hotp);
-        }
-
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc6238AppendixB.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        public void TotpAppendixBTests_WithDelegateKey()
-        {
-            // test values from RFC - Appendix D
-            var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
-            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["totp"]);
-
-            OtpHashMode mode;
-            byte[] key;
-            GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
-
-            var totpCalculator = new Totp(() => key, mode: mode, totpSize: 8);
             var hotp = totpCalculator.ComputeTotp(time);
 
             Assert.AreEqual(expectedResult, hotp);
