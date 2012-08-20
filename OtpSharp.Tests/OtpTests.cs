@@ -18,7 +18,13 @@ namespace OtpSharp.Tests
         /// <summary>
         /// This is the test key defined in the RFC
         /// </summary>
-        public static readonly byte[] rfcTestKey = new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30 };
+        public static byte[] rfcTestKey
+        {
+            get
+            {
+                return new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30 };
+            }
+        }
 
         /// <summary>
         /// The test context
@@ -49,7 +55,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Zero()
         {
-            var t = new Totp(rfcTestKey, step:0);
+            var t = new Totp(rfcTestKey, step: 0);
         }
 
         [TestMethod]
@@ -69,7 +75,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Zero()
         {
-            var t = new Totp(rfcTestKey, totpSize:0);
+            var t = new Totp(rfcTestKey, totpSize: 0);
         }
 
         [TestMethod]
@@ -85,7 +91,7 @@ namespace OtpSharp.Tests
         {
             var t = new Totp(rfcTestKey, totpSize: 11);
         }
-        
+
         [TestMethod]
         public void Digits_Ten()
         {

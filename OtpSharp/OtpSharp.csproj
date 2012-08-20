@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NO_WEB</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\OtpSharp.XML</DocumentationFile>
@@ -38,11 +38,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base32.cs" />
     <Compile Include="Hotp.cs" />
+    <Compile Include="ProtectedKey.cs" />
     <Compile Include="OtpHashMode.cs" />
     <Compile Include="Otp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

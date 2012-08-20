@@ -18,7 +18,7 @@ namespace OtpSharp
         /// <summary>
         /// Secret key
         /// </summary>
-        protected readonly byte[] secretKey;
+        protected readonly ProtectedKey secretKey;
 
         /// <summary>
         /// Constructor for the abstract class.  This is to guarantee that all implementations have a secret key
@@ -31,7 +31,7 @@ namespace OtpSharp
             if (!(secretKey.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
-            this.secretKey = secretKey;
+            this.secretKey = new ProtectedKey(secretKey);
         }
 
         /// <summary>
@@ -46,36 +46,16 @@ namespace OtpSharp
         /// </summary>
         protected internal long CalculateOtp(byte[] data, OtpHashMode mode)
         {
-            using (var hmacHasher = CreateHmacHasher(secretKey, mode))
-            {
-                byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
+            byte[] hmacComputedHash = this.secretKey.ComputeHmacHash(data, mode);
 
-                // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
-                // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
+            // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
+            // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
 
-                int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
-                return (hmacComputedHash[offset] & 0x7f) << 24
-                    | (hmacComputedHash[offset + 1] & 0xff) << 16
-                    | (hmacComputedHash[offset + 2] & 0xff) << 8
-                    | (hmacComputedHash[offset + 3] & 0xff) % 1000000;
-            }
-        }
-
-        /// <summary>
-        /// Create an HMAC object for the specified algorithm
-        /// </summary>
-        private HMAC CreateHmacHasher(byte[] secretKey, OtpHashMode mode)
-        {
-            switch (mode)
-            {
-                case OtpHashMode.Sha256:
-                    return new HMACSHA256(secretKey);
-                case OtpHashMode.Sha512:
-                    return new HMACSHA512(secretKey);
-                default:
-                case OtpHashMode.Sha1:
-                    return new HMACSHA1(secretKey);
-            }
+            int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
+            return (hmacComputedHash[offset] & 0x7f) << 24
+                | (hmacComputedHash[offset + 1] & 0xff) << 16
+                | (hmacComputedHash[offset + 2] & 0xff) << 8
+                | (hmacComputedHash[offset + 3] & 0xff) % 1000000;
         }
 
         /// <summary>
