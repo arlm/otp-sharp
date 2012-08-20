@@ -18,20 +18,24 @@ namespace OtpSharp
         /// <summary>
         /// Secret key
         /// </summary>
-        protected readonly byte[] secretKey;
+        protected readonly Func<byte[]> secretKeyDelegate;
 
         /// <summary>
         /// Constructor for the abstract class.  This is to guarantee that all implementations have a secret key
         /// </summary>
-        /// <param name="secretKey"></param>
-        public Otp(byte[] secretKey)
+        /// <param name="secretKeyFunction">A delegate that returns the secret key</param>
+        public Otp(Func<byte[]> secretKeyFunction)
         {
+            if (secretKeyFunction == null)
+                throw new ArgumentNullException("A key action must be provided");
+
+            var secretKey = secretKeyFunction();
             if (!(secretKey != null))
                 throw new ArgumentNullException("A secret key must be provided");
             if (!(secretKey.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
-            this.secretKey = secretKey;
+            this.secretKeyDelegate = secretKeyFunction;
         }
 
         /// <summary>
@@ -46,7 +50,7 @@ namespace OtpSharp
         /// </summary>
         protected internal long CalculateOtp(byte[] data, OtpHashMode mode)
         {
-            var hmacHasher = CreateHmacHasher(secretKey, mode);
+            var hmacHasher = CreateHmacHasher(this.secretKeyDelegate(), mode);
             byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
 
             // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
@@ -133,7 +137,7 @@ namespace OtpSharp
         /// </summary>
         protected string GetBaseKeyUrl(string user)
         {
-            return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKey));
+            return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKeyDelegate()));
         }
 #endif
         /// <summary>

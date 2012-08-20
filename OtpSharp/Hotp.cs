@@ -11,7 +11,7 @@ namespace OtpSharp
         /// </summary>
         /// <param name="secretKey">The secret key to use in HOTP calculations</param>
         public Hotp(byte[] secretKey)
-            : base(secretKey)
+            : base(() => secretKey)
         {
         }
 
