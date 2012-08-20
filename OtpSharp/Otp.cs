@@ -50,17 +50,19 @@ namespace OtpSharp
         /// </summary>
         protected internal long CalculateOtp(byte[] data, OtpHashMode mode)
         {
-            var hmacHasher = CreateHmacHasher(this.secretKeyDelegate(), mode);
-            byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
+            using (var hmacHasher = CreateHmacHasher(this.secretKeyDelegate(), mode))
+            {
+                byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
 
-            // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
-            // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
+                // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
+                // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
 
-            int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
-            return (hmacComputedHash[offset] & 0x7f) << 24
-                | (hmacComputedHash[offset + 1] & 0xff) << 16
-                | (hmacComputedHash[offset + 2] & 0xff) << 8
-                | (hmacComputedHash[offset + 3] & 0xff) % 1000000;
+                int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
+                return (hmacComputedHash[offset] & 0x7f) << 24
+                    | (hmacComputedHash[offset + 1] & 0xff) << 16
+                    | (hmacComputedHash[offset + 2] & 0xff) << 8
+                    | (hmacComputedHash[offset + 3] & 0xff) % 1000000;
+            }
         }
 
         /// <summary>
