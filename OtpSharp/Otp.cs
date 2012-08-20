@@ -18,24 +18,20 @@ namespace OtpSharp
         /// <summary>
         /// Secret key
         /// </summary>
-        protected readonly Func<byte[]> secretKeyDelegate;
+        protected readonly byte[] secretKey;
 
         /// <summary>
         /// Constructor for the abstract class.  This is to guarantee that all implementations have a secret key
         /// </summary>
-        /// <param name="secretKeyFunction">A delegate that returns the secret key</param>
-        public Otp(Func<byte[]> secretKeyFunction)
+        /// <param name="secretKey"></param>
+        public Otp(byte[] secretKey)
         {
-            if (secretKeyFunction == null)
-                throw new ArgumentNullException("A key action must be provided");
-
-            var secretKey = secretKeyFunction();
             if (!(secretKey != null))
                 throw new ArgumentNullException("A secret key must be provided");
             if (!(secretKey.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
-            this.secretKeyDelegate = secretKeyFunction;
+            this.secretKey = secretKey;
         }
 
         /// <summary>
@@ -50,7 +46,7 @@ namespace OtpSharp
         /// </summary>
         protected internal long CalculateOtp(byte[] data, OtpHashMode mode)
         {
-            using (var hmacHasher = CreateHmacHasher(this.secretKeyDelegate(), mode))
+            using (var hmacHasher = CreateHmacHasher(secretKey, mode))
             {
                 byte[] hmacComputedHash = hmacHasher.ComputeHash(data);
 
@@ -139,7 +135,7 @@ namespace OtpSharp
         /// </summary>
         protected string GetBaseKeyUrl(string user)
         {
-            return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKeyDelegate()));
+            return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKey));
         }
 #endif
         /// <summary>

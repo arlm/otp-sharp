@@ -35,16 +35,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContractTestKeySize_Null()
         {
-            byte[] key = null;
-            var t = new Totp(key);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ContractTestKeyDelegate_Null()
-        {
-            Func<byte[]> key = null;
-            var t = new Totp(key);
+            var t = new Totp(null);
         }
 
         [TestMethod]
