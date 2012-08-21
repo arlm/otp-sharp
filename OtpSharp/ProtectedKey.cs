@@ -22,9 +22,10 @@ namespace OtpSharp
         /// <param name="key">Plaintext key data</param>
         /// <param name="wipeKeyReference"></param>
         /// <param name="isProtected">True if the key data is already protected</param>
-        public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false)
+        /// <param name="keyLength">Specifies the original key lenght if the is protected flag is set</param>
+        public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
         {
-            this.length = key.Length;
+            this.length = (isProtected && keyLength > 0) ? keyLength : key.Length;
             int paddedKeyLength = (int)Math.Ceiling((decimal)key.Length / (decimal)16) * 16;
             this.protectedKeyData = new byte[paddedKeyLength];
             Array.Copy(key, this.protectedKeyData, key.Length);
