@@ -125,14 +125,6 @@ namespace OtpSharp
                 }
             }
 
-            // if the final byte wasn't assigned, assign the current working byte.
-            // since there are no more base 32 characters that could further change it
-            // the working byte is the final value
-            if (arrayIndex < outputByteCount)
-            {
-                outputBuffer[arrayIndex] = workingByte;
-            }
-
             return outputBuffer;
         }
     }
