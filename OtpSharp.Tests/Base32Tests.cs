@@ -32,6 +32,20 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Base32Decoding_Null()
+        {
+            Base32.Decode(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Base32Decoding_Empty()
+        {
+            Base32.Decode(string.Empty);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Base32Encoding_Empty()
         {
@@ -80,13 +94,6 @@ namespace OtpSharp.Tests
         public void Base32Decoding_EmptyString()
         {
             Base32.Decode(string.Empty);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Base32Decoding_Null()
-        {
-            Base32.Decode(null);
         }
     }
 }

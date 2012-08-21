@@ -128,5 +128,13 @@ namespace OtpSharp
         /// Used in generating URLs
         /// </summary>
         protected abstract string OtpType { get; }
+
+        /// <remarks>
+        /// This method simply exists for tests
+        /// </remarks>
+        internal string GetOtpType()
+        {
+            return this.OtpType;
+        }
     }
 }
