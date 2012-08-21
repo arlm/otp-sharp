@@ -115,7 +115,13 @@ namespace OtpSharp
         /// </summary>
         protected string GetBaseKeyUrl(string user)
         {
-            return string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(this.secretKey));
+            string url = null;
+            this.secretKey.UsePlainKey(key =>
+            {
+                url = string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(key));
+            });
+
+            return url;
         }
 #endif
         /// <summary>

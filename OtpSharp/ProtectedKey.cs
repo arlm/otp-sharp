@@ -84,10 +84,18 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Sets uses the key then wipes it from memory
+        /// Allows a delegate to use the key then tries to overwrite it from memory
         /// </summary>
-        private void UsePlainKey(Action<byte[]> useKey)
+        /// <remarks>
+        /// This isn't foolproof as the delegate could create another copy of the key and in some cases even must.
+        /// The goal here is simply to limit the exposre of the plain key in memory as much as possible
+        /// </remarks>
+        /// <param name="useKey">Delegate the uses the plaintext key</param>
+        /// <exception cref="ArgumentNullException">thrown if no delegate is provided</exception>
+        public void UsePlainKey(Action<byte[]> useKey)
         {
+            if (useKey == null)
+                throw new ArgumentNullException("Must provide a delegate that uses the key");
             var plainKey = new byte[this.length];
 
             lock (this.stateSync)
