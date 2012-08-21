@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OtpSharp.Tests
@@ -88,14 +89,6 @@ namespace OtpSharp.Tests
         {
             var hotp = new Hotp(OtpCalculationTests.rfcTestKey);
             Assert.AreEqual("hotp", hotp.GetOtpType());
-        }
-
-        [TestMethod]
-        public void TotpUrl()
-        {
-            var hotp = new Totp(OtpCalculationTests.rfcTestKey);
-            var url = hotp.GetKeyUrl("user");
-            Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}", Base32.Encode(OtpCalculationTests.rfcTestKey)), url);
         }
     }
 }
