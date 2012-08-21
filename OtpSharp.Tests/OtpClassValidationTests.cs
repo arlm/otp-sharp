@@ -89,5 +89,13 @@ namespace OtpSharp.Tests
             var hotp = new Hotp(OtpCalculationTests.rfcTestKey);
             Assert.AreEqual("hotp", hotp.GetOtpType());
         }
+
+        [TestMethod]
+        public void TotpUrl()
+        {
+            var hotp = new Totp(OtpCalculationTests.rfcTestKey);
+            var url = hotp.GetKeyUrl("user");
+            Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}", Base32.Encode(OtpCalculationTests.rfcTestKey)), url);
+        }
     }
 }
