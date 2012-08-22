@@ -50,6 +50,25 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
+        public void ProtectedKey_MultipleUse()
+        {
+            var originalKey = KeyGeneration.GenerateKey(16);
+            var originalCopy = new byte[16];
+            Array.Copy(originalKey, originalCopy, 16);
+            CollectionAssert.AreEqual(originalKey, originalCopy);
+
+            ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
+            CollectionAssert.AreNotEqual(originalKey, originalCopy);
+
+            var pk = new ProtectedKey(originalCopy, wipeKeyReference: false, isProtected: true);
+
+            // The key is protected and un-protected several times.
+            // Make sure that the key can be used multiple times.
+            for (int i = 0; i < 10; i++)
+                pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
+        }
+
+        [TestMethod]
         public void ProtectedKey_ProtectKeyWithSpecificLength()
         {
             var originalKey = KeyGeneration.GenerateKey(20);
