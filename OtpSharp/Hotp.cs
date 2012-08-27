@@ -16,6 +16,15 @@ namespace OtpSharp
         }
 
         /// <summary>
+        /// Create an HOTP instance
+        /// </summary>
+        /// <param name="secretKey">The secret key to use in HOTP calculations</param>
+        public Hotp(ProtectedKey secretKey)
+            : base(secretKey)
+        {
+        }
+
+        /// <summary>
         /// Takes a counter and produces an HOTP value
         /// </summary>
         /// <param name="counter">the counter to be incremented each time this method is called</param>

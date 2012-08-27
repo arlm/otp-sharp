@@ -13,7 +13,7 @@ namespace OtpSharp
     {
         readonly object stateSync = new object();
         readonly byte[] protectedKeyData;
-        readonly int length;
+        readonly int keyLength;
         bool isProtected;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace OtpSharp
         /// <param name="keyLength">Specifies the original key lenght if the is protected flag is set</param>
         public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
         {
-            this.length = (isProtected && keyLength > 0) ? keyLength : key.Length;
+            this.keyLength = (isProtected && keyLength > 0) ? keyLength : key.Length;
             int paddedKeyLength = (int)Math.Ceiling((decimal)key.Length / (decimal)16) * 16;
             this.protectedKeyData = new byte[paddedKeyLength];
             Array.Copy(key, this.protectedKeyData, key.Length);
@@ -49,16 +49,24 @@ namespace OtpSharp
         {
             byte[] hashedValue = null;
 
-            this.UsePlainKey(key =>
+            using (HMAC hmac = this.CreateHmacHash(mode))
             {
-                using (HMAC hmac = this.CreateHmacHash(mode))
+                this.UsePlainKey(key =>
                 {
                     hmac.Key = key;
                     hashedValue = hmac.ComputeHash(input);
-                }
-            });
+                });
+            }
 
             return hashedValue;
+        }
+
+        /// <summary>
+        /// The lenght of the key
+        /// </summary>
+        public int KeyLength
+        {
+            get { return this.keyLength; }
         }
 
         /// <summary>
@@ -97,7 +105,7 @@ namespace OtpSharp
         {
             if (useKey == null)
                 throw new ArgumentNullException("Must provide a delegate that uses the key");
-            var plainKey = new byte[this.length];
+            var plainKey = new byte[this.keyLength];
 
             lock (this.stateSync)
             {
@@ -109,7 +117,7 @@ namespace OtpSharp
                         this.isProtected = false;
 
                     }
-                    Array.Copy(this.protectedKeyData, plainKey, this.length);
+                    Array.Copy(this.protectedKeyData, plainKey, this.keyLength);
                 }
                 finally
                 {

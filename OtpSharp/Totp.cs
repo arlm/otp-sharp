@@ -34,16 +34,38 @@ namespace OtpSharp
         public Totp(byte[] secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
             : base(secretKey)
         {
+            VerifyParameters(step, totpSize);
+
+            this.step = step;
+            this.hashMode = mode;
+            this.totpSize = totpSize;
+        }
+
+        /// <summary>
+        /// Create a TOTP instance
+        /// </summary>
+        /// <param name="secretKey">The secret key to use in TOTP calculations</param>
+        /// <param name="step">The time window step amount to use in calculating time windows.  The default is 30 as recommended in the RFC</param>
+        /// <param name="mode">The hash mode to use</param>
+        /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
+        public Totp(ProtectedKey secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
+            : base(secretKey)
+        {
+            VerifyParameters(step, totpSize);
+
+            this.step = step;
+            this.hashMode = mode;
+            this.totpSize = totpSize;
+        }
+
+        private static void VerifyParameters(int step, int totpSize)
+        {
             if (!(step > 0))
                 throw new ArgumentOutOfRangeException("The step must be a non zero positive integer");
             if (!(totpSize > 0))
                 throw new ArgumentOutOfRangeException("The totp size must be a non zero positive integer");
             if (!(totpSize <= 10))
                 throw new ArgumentOutOfRangeException("The totp size must be no greater than 10");
-
-            this.step = step;
-            this.hashMode = mode;
-            this.totpSize = totpSize;
         }
 
         /// <summary>

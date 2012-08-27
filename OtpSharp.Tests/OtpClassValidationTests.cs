@@ -20,7 +20,8 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContractTestKeySize_Null()
         {
-            var t = new Totp(null);
+            ProtectedKey key = null;
+            var t = new Totp(key);
         }
 
         [TestMethod]

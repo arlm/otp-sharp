@@ -35,6 +35,20 @@ namespace OtpSharp
         }
 
         /// <summary>
+        /// Constrocutor for the abstract class.  This is to guarantee that all implementations have a secret key
+        /// </summary>
+        /// <param name="secretKey"></param>
+        public Otp(ProtectedKey secretKey)
+        {
+            if (!(secretKey != null))
+                throw new ArgumentNullException("A secret key must be provided");
+            if (!(secretKey.KeyLength > 0))
+                throw new ArgumentException("The key must not be empty");
+
+            this.secretKey = secretKey;
+        }
+
+        /// <summary>
         /// An abstract definition of a compute method.  Takes a counter and runs it through the derived algorithm.
         /// </summary>
         /// <param name="counter">Counter or step</param>
