@@ -20,6 +20,14 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContractTestKeySize_Null()
         {
+            byte[] key = null;
+            var t = new Totp(key);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContractTestKeySize_ProtectedKeyNull()
+        {
             ProtectedKey key = null;
             var t = new Totp(key);
         }
@@ -29,6 +37,13 @@ namespace OtpSharp.Tests
         public void ContractTestKeySize_Empty()
         {
             var t = new Totp(new byte[] { });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ContractTestKeySize_ProtectedKeyEmpty()
+        {
+            var t = new Totp(new ProtectedKey(new byte[] { }));
         }
 
         [TestMethod]

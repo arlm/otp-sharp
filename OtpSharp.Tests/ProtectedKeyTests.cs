@@ -11,6 +11,20 @@ namespace OtpSharp.Tests
     public class ProtectedKeyTests
     {
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ProtectedKey_Empty()
+        {
+            var key = new ProtectedKey(new byte[] { });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ProtectedKey_Null()
+        {
+            ProtectedKey key = new ProtectedKey(null);
+        }
+
+        [TestMethod]
         public void ProtectedKey_Basic()
         {
             var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);

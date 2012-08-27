@@ -25,6 +25,11 @@ namespace OtpSharp
         /// <param name="keyLength">Specifies the original key lenght if the is protected flag is set</param>
         public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
         {
+            if (!(key != null))
+                throw new ArgumentNullException("A secret key must be provided");
+            if (!(key.Length > 0))
+                throw new ArgumentException("The key must not be empty");
+
             this.keyLength = (isProtected && keyLength > 0) ? keyLength : key.Length;
             int paddedKeyLength = (int)Math.Ceiling((decimal)key.Length / (decimal)16) * 16;
             this.protectedKeyData = new byte[paddedKeyLength];
@@ -37,14 +42,6 @@ namespace OtpSharp
 
             if (wipeKeyReference)
                 new Random().NextBytes(key);
-        }
-
-        /// <summary>
-        /// The lenght of the key
-        /// </summary>
-        public int KeyLength
-        {
-            get { return this.keyLength; }
         }
 
         /// <summary>

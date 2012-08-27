@@ -42,8 +42,6 @@ namespace OtpSharp
         {
             if (!(secretKey != null))
                 throw new ArgumentNullException("A secret key must be provided");
-            if (!(secretKey.KeyLength > 0))
-                throw new ArgumentException("The key must not be empty");
 
             this.secretKey = secretKey;
         }
