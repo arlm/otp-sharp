@@ -31,7 +31,8 @@ namespace OtpSharp
             if (!(secretKey.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
-            this.secretKey = new ProtectedKey(secretKey);
+            // when passing a key into the constructor the caller may depend on the reference to the key remaining intact.
+            this.secretKey = new ProtectedKey(secretKey, wipeKeyReference: false);
         }
 
         /// <summary>
