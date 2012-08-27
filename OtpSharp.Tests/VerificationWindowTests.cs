@@ -40,6 +40,12 @@ namespace OtpSharp.Tests
             VerifyContents(window, 3, 4, 5, 6, 7, 8, 3, 2, 1, 0);
         }
 
+        [TestMethod]
+        public void RfcVerificationWindow()
+        {
+            VerifyContents(VerificationWindow.RfcSpecifiedNetworkDelay, 3, 2, 3, 4);
+        }
+
         private void VerifyContents(VerificationWindow window, long initialFrame, params long[] contents)
         {
             Assert.AreEqual(contents.Length, contents.Distinct().Count(), "the VerificationWindow contents must be unique");

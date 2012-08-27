@@ -106,8 +106,7 @@ namespace OtpSharp
                 case OtpHashMode.Sha512:
                     hmacAlgorithm = new HMACSHA512();
                     break;
-                default:
-                case OtpHashMode.Sha1:
+                default: //case OtpHashMode.Sha1:
                     hmacAlgorithm = new HMACSHA1();
                     break;
             }

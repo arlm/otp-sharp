@@ -68,6 +68,23 @@ namespace OtpSharp.Tests
 
         [TestMethod]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+            "|DataDirectory|\\Rfc4226AppendixD.xml",
+            "Row",
+            DataAccessMethod.Sequential)]
+        public void HotpAppendixDTests_ProtectedKey()
+        {
+            // test values from RFC - Appendix D
+            long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
+            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["hotp"]);
+
+            Hotp hotpCalculator = new Hotp(new ProtectedKey(rfcTestKey));
+            var hotp = hotpCalculator.ComputeHotp(counter);
+
+            Assert.AreEqual(expectedResult, hotp);
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
             "|DataDirectory|\\Rfc6238AppendixB.xml",
             "Row",
             DataAccessMethod.Sequential)]
@@ -82,6 +99,27 @@ namespace OtpSharp.Tests
             GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
 
             var totpCalculator = new Totp(key, mode: mode, totpSize: 8);
+            var hotp = totpCalculator.ComputeTotp(time);
+
+            Assert.AreEqual(expectedResult, hotp);
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+            "|DataDirectory|\\Rfc6238AppendixB.xml",
+            "Row",
+            DataAccessMethod.Sequential)]
+        public void TotpAppendixBTests_ProtectedKey()
+        {
+            // test values from RFC - Appendix D
+            var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
+            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["totp"]);
+
+            OtpHashMode mode;
+            byte[] key;
+            GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
+
+            var totpCalculator = new Totp(new ProtectedKey(key), mode: mode, totpSize: 8);
             var hotp = totpCalculator.ComputeTotp(time);
 
             Assert.AreEqual(expectedResult, hotp);

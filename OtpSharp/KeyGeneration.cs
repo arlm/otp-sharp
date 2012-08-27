@@ -37,8 +37,7 @@ namespace OtpSharp
                     return 32;
                 case OtpHashMode.Sha512:
                     return 64;
-                default:
-                case OtpHashMode.Sha1:
+                default: //case OtpHashMode.Sha1:
                     return 20;
             }
         }
