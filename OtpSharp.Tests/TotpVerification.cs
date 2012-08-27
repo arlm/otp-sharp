@@ -99,6 +99,14 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
+        public void Totp_EnsureKeyIntegrity()
+        {
+            var key = OtpCalculationTests.rfcTestKey;
+            var totp = new Totp(key);
+            CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, key);
+        }
+
+        [TestMethod]
         public void TotpUrl()
         {
             var hotp = new Totp(OtpCalculationTests.rfcTestKey);
