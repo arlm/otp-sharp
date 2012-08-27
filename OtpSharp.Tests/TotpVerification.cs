@@ -20,8 +20,6 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow);
         }
 
-
-
         [TestMethod]
         public void ExactMatch_SpecificVerificationWindowWithPriors()
         {

@@ -40,56 +40,11 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Uses the protected key to compute an HMAC Hash
-        /// </summary>
-        /// <param name="input">The data to use as the HMAC input</param>
-        /// <param name="mode">The Hash algorithm to use</param>
-        /// <returns>The hashed data</returns>
-        public byte[] ComputeHmacHash(byte[] input, OtpHashMode mode)
-        {
-            byte[] hashedValue = null;
-
-            using (HMAC hmac = this.CreateHmacHash(mode))
-            {
-                this.UsePlainKey(key =>
-                {
-                    hmac.Key = key;
-                    hashedValue = hmac.ComputeHash(input);
-                });
-            }
-
-            return hashedValue;
-        }
-
-        /// <summary>
         /// The lenght of the key
         /// </summary>
         public int KeyLength
         {
             get { return this.keyLength; }
-        }
-
-        /// <summary>
-        /// Create an HMAC object for the specified algorithm
-        /// </summary>
-        private HMAC CreateHmacHash(OtpHashMode otpHashMode)
-        {
-            HMAC hmacAlgorithm = null;
-            switch (otpHashMode)
-            {
-                case OtpHashMode.Sha256:
-                    hmacAlgorithm = new HMACSHA256();
-                    break;
-                case OtpHashMode.Sha512:
-                    hmacAlgorithm = new HMACSHA512();
-                    break;
-                default:
-                case OtpHashMode.Sha1:
-                    hmacAlgorithm = new HMACSHA1();
-                    break;
-            }
-
-            return hmacAlgorithm;
         }
 
         /// <summary>
