@@ -81,10 +81,15 @@ namespace OtpSharp
                 }
             }
 
-            useKey(plainKey);
-
-            // wipe the key from memory by writing random stuff out to it
-            new Random().NextBytes(plainKey);
+            try
+            {
+                useKey(plainKey);
+            }
+            finally
+            {
+                // wipe the key from memory by writing random stuff out to it
+                new Random().NextBytes(plainKey);
+            }
         }
     }
 }

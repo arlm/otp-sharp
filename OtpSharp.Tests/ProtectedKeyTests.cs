@@ -104,5 +104,42 @@ namespace OtpSharp.Tests
             var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
             pk.UsePlainKey(null);
         }
+
+        [TestMethod]
+        public void ProtectedKey_UseKeyWipeTempKey()
+        {
+            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
+            byte[] tempKey = null;
+            pk.UsePlainKey(key =>
+            {
+                tempKey = key;
+                CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, tempKey);
+            });
+
+            CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, tempKey);
+        }
+
+        [TestMethod]
+        public void ProtectedKey_UseKeyThrowExceptionWipeKey()
+        {
+            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
+            byte[] tempKey = null;
+
+            try
+            {
+                pk.UsePlainKey(key =>
+                {
+                    tempKey = key;
+                    CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, tempKey);
+                    throw new ArgumentNullException();
+                });
+
+                Assert.Fail("The exception should have diverted control away from here.");
+            }
+            catch (ArgumentNullException)
+            {
+                CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, tempKey);
+            }
+        }
     }
 }
