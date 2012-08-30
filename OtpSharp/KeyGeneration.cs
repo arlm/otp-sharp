@@ -9,7 +9,7 @@ namespace OtpSharp
         /// <summary>
         /// Generate key of the specified length
         /// </summary>
-        /// <param name="length">Key lenght</param>
+        /// <param name="length">Key length</param>
         /// <returns>The generated key</returns>
         public static byte[] GenerateKey(int length)
         {
@@ -20,7 +20,7 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Generates a key in accordance with the RFC recommened lenght for each algorithm
+        /// Generates a key in accordance with the RFC recommened length for each algorithm
         /// </summary>
         /// <param name="mode">HashMode</param>
         /// <returns>Key</returns>

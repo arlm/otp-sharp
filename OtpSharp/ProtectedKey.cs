@@ -22,7 +22,7 @@ namespace OtpSharp
         /// <param name="key">Plaintext key data</param>
         /// <param name="wipeKeyReference"></param>
         /// <param name="isProtected">True if the key data is already protected</param>
-        /// <param name="keyLength">Specifies the original key lenght if the is protected flag is set</param>
+        /// <param name="keyLength">Specifies the original key length if the is protected flag is set</param>
         public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
         {
             if (!(key != null))

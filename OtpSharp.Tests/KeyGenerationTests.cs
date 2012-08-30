@@ -10,19 +10,19 @@ namespace OtpSharp.Tests
     public class KeyGenerationTests
     {
         [TestMethod]
-        public void LenghtForMode_Sha1()
+        public void LengthForMode_Sha1()
         {
             Assert.AreEqual(20, KeyGeneration.GenerateKey(OtpHashMode.Sha1).Length);
         }
 
         [TestMethod]
-        public void LenghtForMode_Sha256()
+        public void LengthForMode_Sha256()
         {
             Assert.AreEqual(32, KeyGeneration.GenerateKey(OtpHashMode.Sha256).Length);
         }
 
         [TestMethod]
-        public void LenghtForMode_Sha512()
+        public void LengthForMode_Sha512()
         {
             Assert.AreEqual(64, KeyGeneration.GenerateKey(OtpHashMode.Sha512).Length);
         }
