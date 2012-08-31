@@ -74,14 +74,13 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Takes a timestamp and computes a TOTP value
+        /// Takes a timestamp and applies correction (if provided) and then computes a TOTP value
         /// </summary>
         /// <param name="timestamp">The timestamp to use for the TOTP calculation</param>
         /// <returns>a TOTP value</returns>
         public int ComputeTotp(DateTime timestamp)
         {
-            var window = CalculateTimeStepFromTimestamp(timestamp);
-            return (int)this.Compute(window);
+            return ComputeTotpFromSpecificTime(this.correctedTime.GetCorrectedTime(timestamp));
         }
 
         /// <summary>
@@ -93,7 +92,13 @@ namespace OtpSharp
         /// <returns>a TOTP value</returns>
         public int ComputeTotp()
         {
-            return this.ComputeTotp(this.correctedTime.CorrectedUtcNow);
+            return this.ComputeTotpFromSpecificTime(this.correctedTime.CorrectedUtcNow);
+        }
+
+        private int ComputeTotpFromSpecificTime(DateTime timestamp)
+        {
+            var window = CalculateTimeStepFromTimestamp(timestamp);
+            return (int)this.Compute(window);
         }
 
         /// <summary>
@@ -112,7 +117,7 @@ namespace OtpSharp
         /// <returns>True if there is a match.</returns>
         public bool VerifyTotp(int totp, out long timeStepMatched, VerificationWindow window = null)
         {
-            return this.VerifyTotp(this.correctedTime.CorrectedUtcNow, totp, out timeStepMatched, window);
+            return this.VerifyTotpForSpecificTime(this.correctedTime.CorrectedUtcNow, totp, window, out timeStepMatched);
         }
 
         /// <summary>
@@ -128,6 +133,11 @@ namespace OtpSharp
         /// <param name="window">The window of steps to verify</param>
         /// <returns>True if there is a match.</returns>
         public bool VerifyTotp(DateTime timestamp, int totp, out long timeStepMatched, VerificationWindow window = null)
+        {
+            return this.VerifyTotpForSpecificTime(this.correctedTime.GetCorrectedTime(timestamp), totp, window, out timeStepMatched);
+        }
+
+        private bool VerifyTotpForSpecificTime(DateTime timestamp, int totp, VerificationWindow window, out long timeStepMatched)
         {
             var initialStep = CalculateTimeStepFromTimestamp(timestamp);
             return this.Verify(initialStep, totp, out timeStepMatched, window);
@@ -152,7 +162,7 @@ namespace OtpSharp
         /// <returns>Number of remaining seconds</returns>
         public int RemainingSeconds()
         {
-            return RemainingSeconds(this.correctedTime.CorrectedUtcNow);
+            return RemainingSecondsForSpecificTime(this.correctedTime.CorrectedUtcNow);
         }
 
         /// <summary>
@@ -161,6 +171,11 @@ namespace OtpSharp
         /// <param name="timestamp">The timestamp</param>
         /// <returns>Number of remaining seconds</returns>
         public int RemainingSeconds(DateTime timestamp)
+        {
+            return RemainingSecondsForSpecificTime(this.correctedTime.GetCorrectedTime(timestamp));
+        }
+
+        private int RemainingSecondsForSpecificTime(DateTime timestamp)
         {
             return this.step - (int)(((timestamp.Ticks - unixEpochTicks) / ticksToSeconds) % this.step);
         }
@@ -182,7 +197,7 @@ namespace OtpSharp
         /// </summary>
         protected override string OtpType { get { return "totp"; } }
 
-// NO_WEB is useful in cases where only a client profile is available
+        // NO_WEB is useful in cases where only a client profile is available
 #if NO_WEB
 #else
         /// <summary>

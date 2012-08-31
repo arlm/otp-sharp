@@ -31,7 +31,7 @@ namespace OtpSharp.Tests
             var correctedTime = correction.CorrectedUtcNow;
             var difference = hypotheticallyCorrectUtcTime - correctedTime;
 
-            Assert.IsTrue(Math.Abs(difference.TotalMilliseconds) <= 500, "The corrected value is wrong");
+            Assert.IsTrue(Math.Abs(difference.TotalMilliseconds) <= 64, "The corrected value is wrong");
         }
 
         [TestMethod]
@@ -69,13 +69,14 @@ namespace OtpSharp.Tests
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
 
             var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
 
             // make sure we don't run over the window
             while (correctedTotp.RemainingSeconds() == 0)
                 Thread.Sleep(100);
 
             // since the compute totp overload that takes a specific time doesn't apply correction we don't need to TOTP objects
-            var uncorrectedCode = correctedTotp.ComputeTotp(DateTime.UtcNow.AddSeconds(100));
+            var uncorrectedCode = uncorrectedTotp.ComputeTotp(DateTime.UtcNow.AddSeconds(100));
             var correctedCode = correctedTotp.ComputeTotp();
 
             Assert.AreEqual(uncorrectedCode, correctedCode);
@@ -87,6 +88,7 @@ namespace OtpSharp.Tests
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
 
             var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
 
             // make sure we don't run over the window
             while (correctedTotp.RemainingSeconds() == 0)
@@ -97,7 +99,7 @@ namespace OtpSharp.Tests
             long correctedStep, uncorrectedStep;
 
             Assert.IsTrue(correctedTotp.VerifyTotp(code, out correctedStep));
-            Assert.IsTrue(correctedTotp.VerifyTotp(DateTime.UtcNow.AddSeconds(100), code, out uncorrectedStep));
+            Assert.IsTrue(uncorrectedTotp.VerifyTotp(DateTime.UtcNow.AddSeconds(100), code, out uncorrectedStep));
 
             Assert.AreEqual(uncorrectedStep, correctedStep);
         }
