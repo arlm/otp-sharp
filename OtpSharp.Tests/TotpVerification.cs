@@ -201,5 +201,16 @@ namespace OtpSharp.Tests
 
             Assert.AreEqual(code1, code2);
         }
+
+        [TestMethod]
+        public void TotpRemainingTimeUtcOverload()
+        {
+            var totp = new Totp(OtpCalculationTests.rfcTestKey);
+
+            var remaining1 = totp.RemainingSeconds();
+            var remaining2 = totp.RemainingSeconds(DateTime.UtcNow);
+
+            Assert.AreEqual(remaining1, remaining2);
+        }
     }
 }

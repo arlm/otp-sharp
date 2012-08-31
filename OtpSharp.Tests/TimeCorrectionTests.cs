@@ -71,11 +71,6 @@ namespace OtpSharp.Tests
             var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
             var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
 
-            // make sure we don't run over the window
-            while (correctedTotp.RemainingSeconds() == 0)
-                Thread.Sleep(100);
-
-            // since the compute totp overload that takes a specific time doesn't apply correction we don't need to TOTP objects
             var uncorrectedCode = uncorrectedTotp.ComputeTotp(DateTime.UtcNow.AddSeconds(100));
             var correctedCode = correctedTotp.ComputeTotp();
 
@@ -90,10 +85,6 @@ namespace OtpSharp.Tests
             var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
             var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
 
-            // make sure we don't run over the window
-            while (correctedTotp.RemainingSeconds() == 0)
-                Thread.Sleep(100);
-
             var code = correctedTotp.ComputeTotp();
 
             long correctedStep, uncorrectedStep;
@@ -102,6 +93,46 @@ namespace OtpSharp.Tests
             Assert.IsTrue(uncorrectedTotp.VerifyTotp(DateTime.UtcNow.AddSeconds(100), code, out uncorrectedStep));
 
             Assert.AreEqual(uncorrectedStep, correctedStep);
+        }
+
+        [TestMethod]
+        public void TimeCorrection_TotpRemainingSecondsSpecificDateWithCorrection()
+        {
+            var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(15));
+            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+
+            var specificRemaining = correctedTotp.RemainingSeconds(DateTime.UtcNow);
+            var utcRemaining = correctedTotp.RemainingSeconds();
+
+            Assert.AreEqual(specificRemaining, utcRemaining, "The 2 remaining seconds overloads didn't produce the same results");
+        }
+
+        [TestMethod]
+        public void TimeCorrection_TotpComputeTotpSpecificDateWithCorrection()
+        {
+            var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
+            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+
+            var specificCode = correctedTotp.ComputeTotp(DateTime.UtcNow);
+            var utcCode = correctedTotp.ComputeTotp();
+
+            Assert.AreEqual(specificCode, utcCode, "The 2 compute totp overloads didn't produce the same results");
+        }
+
+        [TestMethod]
+        public void TimeCorrection_TotpVerifyTotpSpecificDateWithCorrection()
+        {
+            var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
+            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+
+            var totpCode = correctedTotp.ComputeTotp();
+
+            long specificStep, utcStep;
+
+            Assert.IsTrue(correctedTotp.VerifyTotp(totpCode, out utcStep));
+            Assert.IsTrue(correctedTotp.VerifyTotp(DateTime.UtcNow, totpCode, out specificStep));
+
+            Assert.AreEqual(specificStep, utcStep, "The 2 verify totp overloads didn't produce the same results");
         }
     }
 }
