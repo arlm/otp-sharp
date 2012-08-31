@@ -141,7 +141,7 @@ namespace OtpSharp
         /// </summary>
         /// <param name="initialStep">The initial step to try</param>
         /// <param name="valueToVerify">The value to verify</param>
-        /// <param name="matchedStep">Thed step where the match was found.  If no match was found it will be 0</param>
+        /// <param name="matchedStep">Output parameter that provides the step where the match was found.  If no match was found it will be 0</param>
         /// <param name="window">The window to verify</param>
         /// <returns>True if a match is found</returns>
         protected bool Verify(long initialStep, int valueToVerify, out long matchedStep, VerificationWindow window)

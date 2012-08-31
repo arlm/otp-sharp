@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Base32.cs" />
     <Compile Include="Hotp.cs" />
+    <Compile Include="TimeCorrection.cs" />
     <Compile Include="ProtectedKey.cs" />
     <Compile Include="OtpHashMode.cs" />
     <Compile Include="Otp.cs" />

@@ -23,6 +23,7 @@ namespace OtpSharp
         private readonly int step;
         private readonly OtpHashMode hashMode;
         private readonly int totpSize;
+        private readonly TimeCorrection correctedTime;
 
         /// <summary>
         /// Create a TOTP instance
@@ -31,7 +32,8 @@ namespace OtpSharp
         /// <param name="step">The time window step amount to use in calculating time windows.  The default is 30 as recommended in the RFC</param>
         /// <param name="mode">The hash mode to use</param>
         /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
-        public Totp(byte[] secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
+        /// <param name="timeCorrection">If required, a time correction can be specified to compensate of an out of sync local clock</param>
+        public Totp(byte[] secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
             : base(secretKey)
         {
             VerifyParameters(step, totpSize);
@@ -39,6 +41,7 @@ namespace OtpSharp
             this.step = step;
             this.hashMode = mode;
             this.totpSize = totpSize;
+            this.correctedTime = timeCorrection ?? TimeCorrection.UncorrectedInstance;
         }
 
         /// <summary>
@@ -48,7 +51,8 @@ namespace OtpSharp
         /// <param name="step">The time window step amount to use in calculating time windows.  The default is 30 as recommended in the RFC</param>
         /// <param name="mode">The hash mode to use</param>
         /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
-        public Totp(ProtectedKey secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
+        /// <param name="timeCorrection">If required, a time correction can be specified to compensate of an out of sync local clock</param>
+        public Totp(ProtectedKey secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
             : base(secretKey)
         {
             VerifyParameters(step, totpSize);
@@ -56,6 +60,7 @@ namespace OtpSharp
             this.step = step;
             this.hashMode = mode;
             this.totpSize = totpSize;
+            this.correctedTime = timeCorrection ?? TimeCorrection.UncorrectedInstance;
         }
 
         private static void VerifyParameters(int step, int totpSize)
@@ -80,28 +85,34 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Takes a timestamp and computes a TOTP value for UTC now
+        /// Takes a timestamp and computes a TOTP value for corrected UTC now
         /// </summary>
+        /// <remarks>
+        /// It will be corrected against a corrected UTC time using the provided time correction.  If none was provided then simply the current UTC will be used.
+        /// </remarks>
         /// <returns>a TOTP value</returns>
         public int ComputeTotp()
         {
-            return this.ComputeTotp(DateTime.UtcNow);
+            return this.ComputeTotp(this.correctedTime.CorrectedUtcNow);
         }
 
         /// <summary>
-        /// Verify a value that has been provided with the calculated value
+        /// Verify a value that has been provided with the calculated value.
         /// </summary>
+        /// <remarks>
+        /// It will be corrected against a corrected UTC time using the provided time correction.  If none was provided then simply the current UTC will be used.
+        /// </remarks>
         /// <param name="totp">the trial TOTP value</param>
         /// <param name="timeStepMatched">
         /// This is an output parameter that gives that time step that was used to find a match.
-        /// This is usefule in cases where a TOTP value should only be used once.  This value is a unique identifier of the
+        /// This is useful in cases where a TOTP value should only be used once.  This value is a unique identifier of the
         /// time step (not the value) that can be used to prevent the same step from being used multiple times
         /// </param>
         /// <param name="window">The window of steps to verify</param>
         /// <returns>True if there is a match.</returns>
         public bool VerifyTotp(int totp, out long timeStepMatched, VerificationWindow window = null)
         {
-            return this.VerifyTotp(DateTime.UtcNow, totp, out timeStepMatched, window);
+            return this.VerifyTotp(this.correctedTime.CorrectedUtcNow, totp, out timeStepMatched, window);
         }
 
         /// <summary>
@@ -135,10 +146,13 @@ namespace OtpSharp
         /// <summary>
         /// Remaining seconds in current window based on UtcNow
         /// </summary>
+        /// <remarks>
+        /// It will be corrected against a corrected UTC time using the provided time correction.  If none was provided then simply the current UTC will be used.
+        /// </remarks>
         /// <returns>Number of remaining seconds</returns>
         public int RemainingSeconds()
         {
-            return RemainingSeconds(DateTime.UtcNow);
+            return RemainingSeconds(this.correctedTime.CorrectedUtcNow);
         }
 
         /// <summary>
@@ -168,6 +182,7 @@ namespace OtpSharp
         /// </summary>
         protected override string OtpType { get { return "totp"; } }
 
+// NO_WEB is useful in cases where only a client profile is available
 #if NO_WEB
 #else
         /// <summary>

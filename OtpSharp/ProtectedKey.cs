@@ -20,7 +20,7 @@ namespace OtpSharp
         /// Creates an instance of a protected key.
         /// </summary>
         /// <param name="key">Plaintext key data</param>
-        /// <param name="wipeKeyReference"></param>
+        /// <param name="wipeKeyReference">If true, the key that was provided will be overwritten with random data</param>
         /// <param name="isProtected">True if the key data is already protected</param>
         /// <param name="keyLength">Specifies the original key length if the is protected flag is set</param>
         public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
@@ -45,7 +45,8 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Allows a delegate to use the key then tries to overwrite it from memory
+        /// Allows a delegate to use the key then tries to overwrite it from memory.
+        /// Warning! Do what you need to with the key within the scope of the delegate as it will overwrite the reference when it exists.
         /// </summary>
         /// <remarks>
         /// This isn't foolproof as the delegate could create another copy of the key and in some cases even must.
