@@ -34,7 +34,13 @@
       <TestLink id="9886fbff-aa51-02fd-b176-f9de035aa7c1" name="GenerageKey_Zero" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     </TestLinks>
   </TestList>
-  <TestList name="TOTP" id="4b79ffd8-ed9b-44a8-a38b-373402a0d55e" parentListId="5b567812-482e-454d-bdf6-d9aad47d312a" />
+  <TestList name="TOTP" id="4b79ffd8-ed9b-44a8-a38b-373402a0d55e" parentListId="5b567812-482e-454d-bdf6-d9aad47d312a">
+    <TestLinks>
+      <TestLink id="45d3c964-3bab-c647-11f6-e67d3287711f" name="TimeCorrection_TotpWithCorrectionVerification" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="16e2a2d3-5b71-79b5-2a4d-2db77848a6b7" name="TimeCorrection_TotpWithCorrectionRemainingSeconds" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="8d19b533-e55d-45ec-7c34-f8466f7d4d8d" name="TimeCorrection_TotpWithCorrectionGeneration" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
   <TestList name="Base 32" id="4c1a13b8-b445-4c68-8b02-eff2174082b0" parentListId="925e9ca5-3a1b-41be-8ef0-f1050bf4322e">
     <TestLinks>
       <TestLink id="565bbd3b-4c07-101d-4b2f-25f5af91efbd" name="Base32Decoding_EmptyString" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
