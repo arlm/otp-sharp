@@ -68,5 +68,13 @@ namespace OtpSharp
         {
             get { return GetCorrectedTime(DateTime.UtcNow); }
         }
+
+        /// <summary>
+        /// The timespan that is used to calculate a corrected time
+        /// </summary>
+        public TimeSpan CorrectionFactor
+        {
+            get { return this.timeCorrectionFactor; }
+        }
     }
 }
