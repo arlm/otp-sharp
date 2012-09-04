@@ -15,33 +15,74 @@ namespace OtpSharp
         readonly byte[] protectedKeyData;
         readonly int keyLength;
         bool isProtected;
+        readonly MemoryProtectionScope scope;
+
+        #region static initializers
+
+        /// <summary>
+        /// Static method to create a protected key from a plaintext key.  It will wipe the reference that was passed in once the protected key instance is initialized
+        /// </summary>
+        /// <param name="plaintextKey">The key</param>
+        /// <returns>A protected key instance from the provided key</returns>
+        public static ProtectedKey CreateProtectedKeyAndDestroyPlaintextKey(byte[] plaintextKey)
+        {
+            var key = new ProtectedKey(plaintextKey);
+            // the protected key creates a copy of the key and pads it as needed for in memory protection.
+            // Thus the reference that was passed in isn't needed.  Overwrite it with random garbage.
+            new Random().NextBytes(plaintextKey);
+            return key;
+        }
+
+        /// <summary>
+        /// Creates an instance of the protected key from a byte array that has already been protected using the ProtectedMemory.Protect method call.
+        /// </summary>
+        /// <remarks>
+        /// This must use the SameProcess protection scope or it won't work
+        /// </remarks>
+        /// <param name="preProtectedKey">Pre-protected key data</param>
+        /// <param name="keyLength">The length of the plaintext key (protected memory may need to be padded)</param>
+        /// <param name="scope">The memory protection scope that was used to protect the memory</param>
+        /// <returns>A protected key instance from the provided key</returns>
+        public static ProtectedKey CreateProtectedKeyFromPreprotectedMemory(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
+        {
+            return new ProtectedKey(preProtectedKey, keyLength, scope);
+        }
+
+        #endregion
 
         /// <summary>
         /// Creates an instance of a protected key.
         /// </summary>
         /// <param name="key">Plaintext key data</param>
-        /// <param name="wipeKeyReference">If true, the key that was provided will be overwritten with random data</param>
-        /// <param name="isProtected">True if the key data is already protected</param>
-        /// <param name="keyLength">Specifies the original key length if the is protected flag is set</param>
-        public ProtectedKey(byte[] key, bool wipeKeyReference = true, bool isProtected = false, int keyLength = 0)
+        public ProtectedKey(byte[] key)
         {
             if (!(key != null))
                 throw new ArgumentNullException("A secret key must be provided");
             if (!(key.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
-            this.keyLength = (isProtected && keyLength > 0) ? keyLength : key.Length;
+            this.keyLength = key.Length;
             int paddedKeyLength = (int)Math.Ceiling((decimal)key.Length / (decimal)16) * 16;
             this.protectedKeyData = new byte[paddedKeyLength];
             Array.Copy(key, this.protectedKeyData, key.Length);
 
-            if (!isProtected)
-                ProtectedMemory.Protect(this.protectedKeyData, MemoryProtectionScope.SameProcess);
+            this.scope = MemoryProtectionScope.SameProcess;
+            ProtectedMemory.Protect(this.protectedKeyData, this.scope);
 
             this.isProtected = true;
+        }
 
-            if (wipeKeyReference)
-                new Random().NextBytes(key);
+        private ProtectedKey(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
+        {
+            if (!(preProtectedKey != null))
+                throw new ArgumentNullException("A secret key must be provided");
+            if (!(preProtectedKey.Length > 0))
+                throw new ArgumentException("The key must not be empty");
+
+            this.keyLength = keyLength;
+            this.isProtected = true;
+            this.protectedKeyData = preProtectedKey;
+            this.scope = scope;
         }
 
         /// <summary>
@@ -66,7 +107,7 @@ namespace OtpSharp
                 {
                     if (this.isProtected)
                     {
-                        ProtectedMemory.Unprotect(this.protectedKeyData, MemoryProtectionScope.SameProcess);
+                        ProtectedMemory.Unprotect(this.protectedKeyData, this.scope);
                         this.isProtected = false;
 
                     }
@@ -76,7 +117,7 @@ namespace OtpSharp
                 {
                     if (!this.isProtected)
                     {
-                        ProtectedMemory.Protect(this.protectedKeyData, MemoryProtectionScope.SameProcess);
+                        ProtectedMemory.Protect(this.protectedKeyData, this.scope);
                         this.isProtected = true;
                     }
                 }

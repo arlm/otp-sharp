@@ -32,7 +32,7 @@ namespace OtpSharp
                 throw new ArgumentException("The key must not be empty");
 
             // when passing a key into the constructor the caller may depend on the reference to the key remaining intact.
-            this.secretKey = new ProtectedKey(secretKey, wipeKeyReference: false);
+            this.secretKey = new ProtectedKey(secretKey);
         }
 
         /// <summary>

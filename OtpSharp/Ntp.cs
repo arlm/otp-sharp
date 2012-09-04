@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OtpSharp
@@ -20,7 +21,7 @@ namespace OtpSharp
         /// Get a time correction factor against NIST
         /// </summary>
         /// <returns>DateTimeOffset correction</returns>
-        public static Task<TimeCorrection> GetTimeCorrectionFromNistAsync()
+        public static Task<TimeCorrection> GetTimeCorrectionFromNistAsync(CancellationToken token = default(CancellationToken))
         {
             return (new TaskFactory<TimeCorrection>()).StartNew(() => GetTimeCorrectionFromNist());
         }
@@ -29,12 +30,13 @@ namespace OtpSharp
         /// Get a time correction factor against NIST
         /// </summary>
         /// <returns>DateTimeOffset correction</returns>
-        public static TimeCorrection GetTimeCorrectionFromNist()
+        public static TimeCorrection GetTimeCorrectionFromNist(CancellationToken token = default(CancellationToken))
         {
             var servers = GetNistServers();
 
             foreach (string server in servers)
             {
+                token.ThrowIfCancellationRequested();
                 try
                 {
                     string response = null;

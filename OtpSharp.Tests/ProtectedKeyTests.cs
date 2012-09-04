@@ -35,15 +35,20 @@ namespace OtpSharp.Tests
         public void ProtectedKey_WipeReference()
         {
             var key = OtpCalculationTests.rfcTestKey;
-            var pk = new ProtectedKey(key);
+            var pk = ProtectedKey.CreateProtectedKeyAndDestroyPlaintextKey(key);
             CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, key);
         }
 
+        /// <remarks>
+        /// This test exists because the original API would overwrite the plaintext key passed
+        /// into the constructor with random garbage.  This test is to ensure that behavior
+        /// isn't present anymore.
+        /// </remarks>
         [TestMethod]
-        public void ProtectedKey_SkipWipeReference()
+        public void ProtectedKey_EnsureOriginalkeyIntegrity()
         {
             var key = OtpCalculationTests.rfcTestKey;
-            var pk = new ProtectedKey(key, wipeKeyReference: false);
+            var pk = new ProtectedKey(key);
             CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, key);
         }
 
@@ -58,7 +63,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = new ProtectedKey(originalCopy, wipeKeyReference: false, isProtected: true);
+            var pk = ProtectedKey.CreateProtectedKeyFromPreprotectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
 
             pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
         }
@@ -74,7 +79,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = new ProtectedKey(originalCopy, wipeKeyReference: false, isProtected: true);
+            var pk = ProtectedKey.CreateProtectedKeyFromPreprotectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
 
             // The key is protected and un-protected several times.
             // Make sure that the key can be used multiple times.
@@ -92,7 +97,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = new ProtectedKey(originalCopy, wipeKeyReference: false, isProtected: true, keyLength: 20);
+            var pk = ProtectedKey.CreateProtectedKeyFromPreprotectedMemory(originalCopy, 20, MemoryProtectionScope.SameProcess);
 
             pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key, "The unprotected plain key and the original key don't match"));
         }
