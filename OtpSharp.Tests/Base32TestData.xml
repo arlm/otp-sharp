@@ -23,6 +23,32 @@
     <base32Unpadded>gezDGNBVGY3TQOJqGEZdGNBvGY3TQOJQ</base32Unpadded>
   </Row>
   
+  <!-- Edge cases-->
+
+  <Row>
+    <base32>77777777</base32>
+    <base64>//////8=</base64>
+    <base32Unpadded>77777777</base32Unpadded>
+  </Row>
+
+  <Row>
+    <base32>7777777=</base32>
+    <base64>/////w==</base64>
+    <base32Unpadded>7777777</base32Unpadded>
+  </Row>
+
+  <Row>
+    <base32>777777==</base32>
+    <base64>////</base64>
+    <base32Unpadded>777777</base32Unpadded>
+  </Row>
+
+  <Row>
+    <base32>77777===</base32>
+    <base64>////</base64>
+    <base32Unpadded>77777</base32Unpadded>
+  </Row>
+  
   <!-- The remainder are from RFC 4648 Section 10 http://tools.ietf.org/html/rfc4648#section-10 -->
   <Row>
     <base32>MY======</base32>
