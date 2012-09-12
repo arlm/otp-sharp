@@ -20,6 +20,7 @@ namespace OtpSharp.Tests
             var correction = new TimeCorrection(baseTime, incorrectReferenceTime);
 
             Assert.AreEqual(baseTime, correction.GetCorrectedTime(incorrectReferenceTime));
+            Assert.AreEqual(TimeSpan.FromMilliseconds(-12500), correction.CorrectionFactor);
         }
 
         [TestMethod]

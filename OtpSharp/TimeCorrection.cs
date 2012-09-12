@@ -18,7 +18,7 @@ namespace OtpSharp
         /// An instance that provides no correction factor
         /// </summary>
         public static readonly TimeCorrection UncorrectedInstance = new TimeCorrection();
-        
+
         private readonly TimeSpan timeCorrectionFactor;
 
         /// <summary>

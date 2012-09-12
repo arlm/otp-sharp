@@ -69,6 +69,20 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ProtectedKey_ProtectKeyEmpty()
+        {
+            var pk = ProtectedKey.CreateProtectedKeyFromPreprotectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ProtectedKey_ProtectKeyNull()
+        {
+            var pk = ProtectedKey.CreateProtectedKeyFromPreprotectedMemory(null, 16, MemoryProtectionScope.SameProcess);
+        }
+
+        [TestMethod]
         public void ProtectedKey_MultipleUse()
         {
             var originalKey = KeyGeneration.GenerateKey(16);
