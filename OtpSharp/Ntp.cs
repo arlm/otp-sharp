@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace OtpSharp
 {
@@ -17,19 +17,32 @@ namespace OtpSharp
     /// </remarks>
     public static class Ntp
     {
+#if NO_TPL
+        // use NO_TPL to remove any reliance on the TPL library introduced in .net 4.0
+#else
         /// <summary>
         /// Get a time correction factor against NIST
         /// </summary>
-        /// <returns>DateTimeOffset correction</returns>
-        public static Task<TimeCorrection> GetTimeCorrectionFromNistAsync(CancellationToken token = default(CancellationToken))
+        /// <returns>Time Correction</returns>
+        public static System.Threading.Tasks.Task<TimeCorrection> GetTimeCorrectionFromNistAsync(CancellationToken token = default(CancellationToken))
         {
-            return (new TaskFactory<TimeCorrection>()).StartNew(() => GetTimeCorrectionFromNist());
+            return (new System.Threading.Tasks.TaskFactory<TimeCorrection>()).StartNew(() => GetTimeCorrectionFromNist(token));
         }
 
         /// <summary>
+        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast but not authoritative.
+        /// </summary>
+        /// <returns>Time Correction</returns>
+        public static System.Threading.Tasks.Task<TimeCorrection> GetTimeCorrectionFromGoogleAsync()
+        {
+            return (new System.Threading.Tasks.TaskFactory<TimeCorrection>()).StartNew(() => GetTimeCorrectionFromGoogle());
+        }
+
+#endif
+        /// <summary>
         /// Get a time correction factor against NIST
         /// </summary>
-        /// <returns>DateTimeOffset correction</returns>
+        /// <returns>Time Correction</returns>
         public static TimeCorrection GetTimeCorrectionFromNist(CancellationToken token = default(CancellationToken))
         {
             var servers = GetNistServers();
@@ -63,6 +76,22 @@ namespace OtpSharp
             }
 
             throw new ApplicationException("Couldn't get network time");
+        }
+
+        /// <summary>
+        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast but not authoritative.
+        /// </summary>
+        /// <returns>Time Correction</returns>
+        public static TimeCorrection GetTimeCorrectionFromGoogle()
+        {
+            using (var wc = new WebClient())
+            {
+                wc.DownloadData("https://www.google.com");
+                var dateHeader = wc.ResponseHeaders.Get("Date");
+                var date = DateTime.Parse(dateHeader);
+
+                return new TimeCorrection(date);
+            }
         }
 
         private static string[] GetNistServers()
