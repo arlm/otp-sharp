@@ -52,13 +52,20 @@ namespace OtpSharp
         /// This implementation is experimental and doesn't have any tests against it.
         /// This isn't even close to a robust and reliable implementation.
         /// </remarks>
+#if NO_TPL
+        public static TimeCorrection GetTimeCorrectionFromNist()
+#else
         public static TimeCorrection GetTimeCorrectionFromNist(CancellationToken token = default(CancellationToken))
+#endif
         {
             var servers = GetNistServers();
 
             foreach (string server in servers)
             {
+#if NO_TPL
+#else
                 token.ThrowIfCancellationRequested();
+#endif
                 try
                 {
                     string response = null;
