@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -24,13 +25,17 @@ namespace OtpSharp
         /// Get a time correction factor against NIST
         /// </summary>
         /// <returns>Time Correction</returns>
+        /// <remarks>
+        /// This implementation is experimental and doesn't have any tests against it.
+        /// This isn't even close to a robust and reliable implementation.
+        /// </remarks>
         public static System.Threading.Tasks.Task<TimeCorrection> GetTimeCorrectionFromNistAsync(CancellationToken token = default(CancellationToken))
         {
             return (new System.Threading.Tasks.TaskFactory<TimeCorrection>()).StartNew(() => GetTimeCorrectionFromNist(token));
         }
 
         /// <summary>
-        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast but not authoritative.
+        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast and reliable but not authoritative.
         /// </summary>
         /// <returns>Time Correction</returns>
         public static System.Threading.Tasks.Task<TimeCorrection> GetTimeCorrectionFromGoogleAsync()
@@ -43,6 +48,10 @@ namespace OtpSharp
         /// Get a time correction factor against NIST
         /// </summary>
         /// <returns>Time Correction</returns>
+        /// <remarks>
+        /// This implementation is experimental and doesn't have any tests against it.
+        /// This isn't even close to a robust and reliable implementation.
+        /// </remarks>
         public static TimeCorrection GetTimeCorrectionFromNist(CancellationToken token = default(CancellationToken))
         {
             var servers = GetNistServers();
@@ -68,10 +77,10 @@ namespace OtpSharp
                         return new TimeCorrection(networkTime);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    // LOG?
-                    // Loop around and try again on a different endpoint
+                    Debug.Write(e.Message);
+                    continue; // Loop around and try again on a different endpoint
                 }
             }
 
@@ -79,7 +88,7 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast but not authoritative.
+        /// Get a time correction factor using Google's webservers as the time source.  Extremely fast and reliable but not authoritative.
         /// </summary>
         /// <returns>Time Correction</returns>
         public static TimeCorrection GetTimeCorrectionFromGoogle()
