@@ -6,7 +6,10 @@ namespace OtpSharp.Tests
 {
     /// <remarks>
     /// Warning! This is potentially a brittle test as it relies on the completion of the test body within a specific time.
-    /// Every effort has been taken to make these tests not fail when they shouldn't.
+    /// Every effort (short of injecting mocks for DateTime.UtcNow) has been taken to make these tests not fail when they shouldn't.
+    /// 
+    /// If there is a failure re-run the test and report a bug and we'll consider moving to mocks.  Haven't seen it yet but it is 
+    /// possible if the the time the test is run and thread scheduler conspire against the test.
     /// </remarks>
     [TestClass]
     public class TimeCorrectionTests
