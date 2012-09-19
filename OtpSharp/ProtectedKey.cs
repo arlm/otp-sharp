@@ -33,14 +33,11 @@ namespace OtpSharp
         /// <summary>
         /// Creates an instance of the protected key from a byte array that has already been protected using the ProtectedMemory.Protect method call.
         /// </summary>
-        /// <remarks>
-        /// This must use the SameProcess protection scope or it won't work
-        /// </remarks>
         /// <param name="preProtectedKey">Pre-protected key data</param>
         /// <param name="keyLength">The length of the plaintext key (protected memory may need to be padded)</param>
         /// <param name="scope">The memory protection scope that was used to protect the memory</param>
         /// <returns>A protected key instance from the provided key</returns>
-        public static ProtectedKey CreateProtectedKeyFromPreprotectedMemory(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
+        public static ProtectedKey CreateProtectedKeyFromPreProtectedMemory(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
         {
             return new ProtectedKey(preProtectedKey, keyLength, scope);
         }
@@ -74,6 +71,8 @@ namespace OtpSharp
             if (!(preProtectedKey != null))
                 throw new ArgumentNullException("A secret key must be provided");
             if (!(preProtectedKey.Length > 0))
+                throw new ArgumentException("The key must not be empty");
+            if (!(keyLength > 0))
                 throw new ArgumentException("The key must not be empty");
 
             this.keyLength = keyLength;

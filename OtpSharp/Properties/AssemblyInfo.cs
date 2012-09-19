@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.4")]
 [assembly: AssemblyFileVersion("1.0.4")]
 
-// allow the test assembly to unit test
+// allow the test assembly to unit test internals
 [assembly: InternalsVisibleTo("OtpSharp.Tests")]
