@@ -106,7 +106,7 @@ namespace OtpSharp
                 var dateHeader = wc.ResponseHeaders.Get("Date");
                 var date = DateTime.Parse(dateHeader);
 
-                return new TimeCorrection(date);
+                return new TimeCorrection(date.ToUniversalTime());
             }
         }
 
