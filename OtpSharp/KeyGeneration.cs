@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace OtpSharp
 {
     /// <summary>
@@ -7,11 +8,22 @@ namespace OtpSharp
     public class KeyGeneration
     {
         /// <summary>
-        /// Generate key of the specified length
+        /// Generates a random key in accordance with the RFC recommened length for each algorithm
         /// </summary>
         /// <param name="length">Key length</param>
         /// <returns>The generated key</returns>
+        [Obsolete("Please use KeyGeneration.GenerateRandomKey instead")]
         public static byte[] GenerateKey(int length)
+        {
+            return GenerateRandomKey(length);
+        }
+
+        /// <summary>
+        /// Generates a random key in accordance with the RFC recommened length for each algorithm
+        /// </summary>
+        /// <param name="length">Key length</param>
+        /// <returns>The generated key</returns>
+        public static byte[] GenerateRandomKey(int length)
         {
             byte[] key = new byte[length];
             var rnd = System.Security.Cryptography.RandomNumberGenerator.Create();
@@ -24,9 +36,20 @@ namespace OtpSharp
         /// </summary>
         /// <param name="mode">HashMode</param>
         /// <returns>Key</returns>
+        [Obsolete("Please use KeyGeneration.GenerateRandomKey instead")]
         public static byte[] GenerateKey(OtpHashMode mode = OtpHashMode.Sha1)
         {
-            return GenerateKey(LengthForMode(mode));
+            return GenerateRandomKey(mode);
+        }
+
+        /// <summary>
+        /// Generates a random key in accordance with the RFC recommened length for each algorithm
+        /// </summary>
+        /// <param name="mode">HashMode</param>
+        /// <returns>Key</returns>
+        public static byte[] GenerateRandomKey(OtpHashMode mode = OtpHashMode.Sha1)
+        {
+            return GenerateRandomKey(LengthForMode(mode));
         }
 
         private static int LengthForMode(OtpHashMode mode)
