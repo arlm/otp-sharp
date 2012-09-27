@@ -28,11 +28,18 @@ namespace OtpSharp
         public static byte[] GenerateRandomKey(int length)
         {
             byte[] key = new byte[length];
+#if NET35
+            var rnd = System.Security.Cryptography.RandomNumberGenerator.Create();
+#else
             using (var rnd = System.Security.Cryptography.RandomNumberGenerator.Create())
             {
+#endif
                 rnd.GetBytes(key);
                 return key;
+#if NET35
+#else
             }
+#endif
         }
 
         /// <summary>

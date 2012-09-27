@@ -19,7 +19,7 @@ namespace OtpSharp
     /// </remarks>
     public static class Ntp
     {
-#if NO_TPL
+#if NET35
         // use NO_TPL to remove any reliance on the TPL library introduced in .net 4.0
 #else
         /// <summary>
@@ -53,7 +53,7 @@ namespace OtpSharp
         /// This implementation is experimental and doesn't have any tests against it.
         /// This isn't even close to a robust and reliable implementation.
         /// </remarks>
-#if NO_TPL
+#if NET35
         public static TimeCorrection GetTimeCorrectionFromNist()
 #else
         public static TimeCorrection GetTimeCorrectionFromNist(CancellationToken token = default(CancellationToken))
@@ -63,7 +63,7 @@ namespace OtpSharp
 
             foreach (string server in servers)
             {
-#if NO_TPL
+#if NET35
 #else
                 token.ThrowIfCancellationRequested();
 #endif
