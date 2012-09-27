@@ -27,9 +27,9 @@ namespace OtpSharp
         public Otp(byte[] secretKey)
         {
             if (!(secretKey != null))
-                throw new ArgumentNullException("A secret key must be provided");
+                throw new ArgumentNullException("secretKey");
             if (!(secretKey.Length > 0))
-                throw new ArgumentException("The key must not be empty");
+                throw new ArgumentException("secretKey empty");
 
             // when passing a key into the constructor the caller may depend on the reference to the key remaining intact.
             this.secretKey = new ProtectedKey(secretKey);
@@ -81,7 +81,7 @@ namespace OtpSharp
         {
             byte[] hashedValue = null;
 
-            using (HMAC hmac = this.CreateHmacHash(mode))
+            using (HMAC hmac = CreateHmacHash(mode))
             {
                 this.secretKey.UsePlainKey(key =>
                 {
@@ -96,7 +96,7 @@ namespace OtpSharp
         /// <summary>
         /// Create an HMAC object for the specified algorithm
         /// </summary>
-        private HMAC CreateHmacHash(OtpHashMode otpHashMode)
+        private static HMAC CreateHmacHash(OtpHashMode otpHashMode)
         {
             HMAC hmacAlgorithm = null;
             switch (otpHashMode)
@@ -120,7 +120,7 @@ namespace OtpSharp
         /// <remarks>
         /// RFC 4226 specifies big endian as the method for converting the counter to data to hash.
         /// </remarks>
-        protected internal byte[] GetBigEndianBytes(long input)
+        protected static internal byte[] GetBigEndianBytes(long input)
         {
             // Since .net uses little endian numbers, we need to reverse the byte order to get big endian.
             var data = BitConverter.GetBytes(input);
@@ -131,9 +131,9 @@ namespace OtpSharp
         /// <summary>
         /// truncates a number down to the specified number of digits
         /// </summary>
-        protected internal int Digits(long input, int digits)
+        protected internal static int Digits(long input, int digitCount)
         {
-            return ((int)input % (int)Math.Pow(10, digits));
+            return ((int)input % (int)Math.Pow(10, digitCount));
         }
 
         /// <summary>

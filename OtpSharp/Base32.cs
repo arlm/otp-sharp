@@ -8,7 +8,7 @@ namespace OtpSharp
     /// <remarks>
     /// http://tools.ietf.org/html/rfc4648
     /// </remarks>
-    public class Base32
+    public static class Base32
     {
         /// <summary>
         /// The number of bits in a base32 encoded character
@@ -32,10 +32,10 @@ namespace OtpSharp
         public static string Encode(byte[] data)
         {
             if (data == null)
-                throw new ArgumentNullException("Binary data must be provided");
+                throw new ArgumentNullException("data");
 
             if (data.Length == 0)
-                throw new ArgumentException("The binary data must not be empty");
+                throw new ArgumentException("data must not be empty");
 
             // The output character count is calculated in 40 bit blocks.  That is because the least
             // common blocks size for both binary (8 bit) and base 32 (5 bit) is 40.  Padding must be used
@@ -86,14 +86,14 @@ namespace OtpSharp
         public static byte[] Decode(string base32)
         {
             if (string.IsNullOrEmpty(base32))
-                throw new ArgumentNullException("Must provide a base 32 string as input");
+                throw new ArgumentNullException("base32");
 
             var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
 
             foreach (var c in unpaddedBase32)
             {
                 if (encodingChars.IndexOf(c) < 0)
-                    throw new ArgumentException("The input string contained illegal characters");
+                    throw new ArgumentException("base32 contains illegal characters");
             }
 
             // we have already removed the padding so this will tell us how many actual bytes there should be

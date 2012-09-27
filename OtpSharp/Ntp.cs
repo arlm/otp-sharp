@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -91,7 +92,7 @@ namespace OtpSharp
                 }
             }
 
-            throw new ApplicationException("Couldn't get network time");
+            throw new NtpException("Couldn't get network time");
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace OtpSharp
             {
                 wc.DownloadData("https://www.google.com");
                 var dateHeader = wc.ResponseHeaders.Get("Date");
-                var date = DateTime.Parse(dateHeader);
+                var date = DateTime.Parse(dateHeader, CultureInfo.InvariantCulture.DateTimeFormat);
 
                 return new TimeCorrection(date.ToUniversalTime());
             }
@@ -156,7 +157,7 @@ namespace OtpSharp
                 var match = Regex.Match(response, pattern);
                 if (match.Success)
                 {
-                    ntpUtc = DateTime.Parse("20" + match.Groups[0].Value);
+                    ntpUtc = DateTime.Parse("20" + match.Groups[0].Value, CultureInfo.InvariantCulture.DateTimeFormat);
                     return true;
                 }
                 else

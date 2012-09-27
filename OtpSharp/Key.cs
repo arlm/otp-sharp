@@ -20,7 +20,7 @@ namespace OtpSharp
         public void UsePlainKey(Action<byte[]> useKey)
         {
             if (useKey == null)
-                throw new ArgumentNullException("Must provide a delegate that uses the key");
+                throw new ArgumentNullException("useKey");
 
             var plainKey = GetCopyOfKey();
 

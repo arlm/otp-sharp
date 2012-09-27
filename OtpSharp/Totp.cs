@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace OtpSharp
 {
@@ -187,9 +188,9 @@ namespace OtpSharp
         /// <returns>TOTP calculated code</returns>
         protected override long Compute(long counter)
         {
-            var data = this.GetBigEndianBytes(counter);
+            var data = GetBigEndianBytes(counter);
             var otp = this.CalculateOtp(data, this.hashMode);
-            return this.Digits(otp, this.totpSize);
+            return Digits(otp, this.totpSize);
         }
 
         /// <summary>
@@ -207,15 +208,15 @@ namespace OtpSharp
         public string GetKeyUrl(string user)
         {
             if (string.IsNullOrEmpty(user))
-                throw new ArgumentNullException("The user must be provided");
+                throw new ArgumentNullException("user");
 
             var url = this.GetBaseKeyUrl(user);
 
             if (this.hashMode != OtpHashMode.Sha1)
-                url += string.Format("&algorithm={0}", this.hashMode);
+                url += string.Format(CultureInfo.InvariantCulture.NumberFormat, "&algorithm={0}", this.hashMode);
 
             if (this.step != 30)
-                url += string.Format("&period={0}", this.step);
+                url += string.Format(CultureInfo.InvariantCulture.NumberFormat, "&period={0}", this.step);
 
             if (this.totpSize != 6)
             {

@@ -7,7 +7,7 @@ namespace OtpSharp
     /// <summary>
     /// Helpers to work with keys
     /// </summary>
-    public class KeyGeneration
+    public static class KeyGeneration
     {
         /// <summary>
         /// Generates a random key in accordance with the RFC recommened length for each algorithm
@@ -28,9 +28,11 @@ namespace OtpSharp
         public static byte[] GenerateRandomKey(int length)
         {
             byte[] key = new byte[length];
-            var rnd = System.Security.Cryptography.RandomNumberGenerator.Create();
-            rnd.GetBytes(key);
-            return key;
+            using (var rnd = System.Security.Cryptography.RandomNumberGenerator.Create())
+            {
+                rnd.GetBytes(key);
+                return key;
+            }
         }
 
         /// <summary>
@@ -63,6 +65,8 @@ namespace OtpSharp
         /// <returns>Derived key</returns>
         public static byte[] DeriveKeyFromMaster(Key masterKey, byte[] publicIdentifier, OtpHashMode mode = OtpHashMode.Sha1)
         {
+            if (masterKey == null)
+                throw new ArgumentNullException("masterKey");
             byte[] key = null;
             masterKey.UsePlainKey(plainMasterKey =>
             {
@@ -129,7 +133,9 @@ namespace OtpSharp
 
         internal static void Destroy(byte[] sensetiveData)
         {
-
+            if (sensetiveData == null)
+                throw new ArgumentNullException("sensetiveData");
+            new Random().NextBytes(sensetiveData);
         }
 
         #endregion

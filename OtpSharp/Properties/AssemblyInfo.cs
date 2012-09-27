@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -37,3 +38,5 @@ using System.Runtime.InteropServices;
 
 // allow the test assembly to unit test internals
 [assembly: InternalsVisibleTo("OtpSharp.Tests")]
+
+[assembly: CLSCompliant(true)]

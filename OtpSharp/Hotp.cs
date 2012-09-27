@@ -31,7 +31,7 @@ namespace OtpSharp
         /// <returns>Hotp</returns>
         public int ComputeHotp(long counter)
         {
-            return this.Digits(this.ComputeHotpDecimal(counter), 6); // all of the HOTP values are six digits long
+            return Digits(this.ComputeHotpDecimal(counter), 6); // all of the HOTP values are six digits long
         }
 
         /// <remarks>
@@ -51,7 +51,7 @@ namespace OtpSharp
         /// <returns>HOTP calculated code</returns>
         protected override long Compute(long counter)
         {
-            var hashData = this.GetBigEndianBytes(counter);
+            var hashData = GetBigEndianBytes(counter);
             return this.CalculateOtp(hashData, OtpHashMode.Sha1);
         }
 
