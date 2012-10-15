@@ -91,7 +91,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release35Client\</OutputPath>
-    <DefineConstants>TRACE;NO_TPL;NO_WEB</DefineConstants>
+    <DefineConstants>TRACE;CODE_ANALYSIS;NET35;NO_WEB</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release35Client\OtpSharp.XML</DocumentationFile>
