@@ -8,6 +8,43 @@ namespace OtpSharp
     /// </summary>
     public class ProtectedKey : Key
     {
+        #region platform supported
+
+        static bool platformSupportTested = false;
+        static bool platformSupported = false;
+        static readonly object platformSupportSync = new object();
+
+        static bool IsPlatformSupported()
+        {
+            // if you want to force in memory protection over the application working, uncomment the return true;
+            // return true;
+            lock (platformSupportSync)
+            {
+                if (platformSupportTested)
+                    return platformSupported;
+                else
+                {
+                    try
+                    {
+                        var dummyData = new byte[16];
+                        ProtectedMemory.Protect(dummyData, MemoryProtectionScope.SameProcess);
+                        platformSupported = true;
+                    }
+                    catch (PlatformNotSupportedException)
+                    {
+                        platformSupported = false;
+                    }
+                    finally
+                    {
+                        platformSupportTested = true;
+                    }
+                    return platformSupported;
+                }
+            }
+        }
+
+        #endregion platform supported
+
         readonly object stateSync = new object();
         readonly byte[] protectedKeyData;
         readonly int keyLength;
@@ -60,10 +97,13 @@ namespace OtpSharp
             this.protectedKeyData = new byte[paddedKeyLength];
             Array.Copy(key, this.protectedKeyData, key.Length);
 
-            this.scope = MemoryProtectionScope.SameProcess;
-            ProtectedMemory.Protect(this.protectedKeyData, this.scope);
+            if (IsPlatformSupported())
+            {
+                this.scope = MemoryProtectionScope.SameProcess;
+                ProtectedMemory.Protect(this.protectedKeyData, this.scope);
 
-            this.isProtected = true;
+                this.isProtected = true;
+            }
         }
 
         private ProtectedKey(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
@@ -96,13 +136,12 @@ namespace OtpSharp
                     {
                         ProtectedMemory.Unprotect(this.protectedKeyData, this.scope);
                         this.isProtected = false;
-
                     }
                     Array.Copy(this.protectedKeyData, plainKey, this.keyLength);
                 }
                 finally
                 {
-                    if (!this.isProtected)
+                    if (!this.isProtected && IsPlatformSupported())
                     {
                         ProtectedMemory.Protect(this.protectedKeyData, this.scope);
                         this.isProtected = true;
