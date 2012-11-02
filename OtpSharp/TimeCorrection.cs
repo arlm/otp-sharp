@@ -9,8 +9,10 @@ namespace OtpSharp
     /// In cases where the local system time is incorrect it is preferable to simply correct the system time.
     /// This class is provided to handle cases where it isn't possible for the client, the server, or both, to be on the correct time.
     /// 
-    /// This library provides facilities to to ping NIST for a correct network time.  This class can be used manually however in cases where a server's time is off
+    /// This library provides limited facilities to to ping NIST for a correct network time.  This class can be used manually however in cases where a server's time is off
     /// and the consumer of this library can't control it.  In that case create an instance of this class and provide the current server time as the correct time parameter
+    /// 
+    /// This class is immutable and therefore threadsafe
     /// </remarks>
     public class TimeCorrection
     {

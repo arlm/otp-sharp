@@ -2,7 +2,7 @@
 namespace OtpSharp
 {
     /// <summary>
-    /// Indicates which HMAC hash should be used
+    /// Indicates which HMAC hashing algorithm should be used
     /// </summary>
     public enum OtpHashMode
     {

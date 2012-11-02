@@ -42,6 +42,8 @@ namespace OtpSharp
             this.step = step;
             this.hashMode = mode;
             this.totpSize = totpSize;
+
+            // we never null check the corrected time object.  Since it's readonly, we'll ensure that it isn't null here and provide neatral functionality in this case.
             this.correctedTime = timeCorrection ?? TimeCorrection.UncorrectedInstance;
         }
 
@@ -61,6 +63,8 @@ namespace OtpSharp
             this.step = step;
             this.hashMode = mode;
             this.totpSize = totpSize;
+
+            // we never null check the corrected time object.  Since it's readonly, we'll ensure that it isn't null here and provide neatral functionality in this case.
             this.correctedTime = timeCorrection ?? TimeCorrection.UncorrectedInstance;
         }
 
