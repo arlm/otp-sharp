@@ -78,9 +78,9 @@ namespace OtpSharp
             masterKey.UsePlainKey(plainMasterKey =>
             {
                 var hashAlgorithm = GetHashAlgorithmForMode(mode);
-                var masterKeyWithPublicIdentifier = Combine(plainMasterKey, publicIdentifier);
+                var masterKeyWithPublicIdentifier = KeyUtilities.Combine(plainMasterKey, publicIdentifier);
                 key = hashAlgorithm.ComputeHash(masterKeyWithPublicIdentifier);
-                Destroy(masterKeyWithPublicIdentifier);
+                KeyUtilities.Destroy(masterKeyWithPublicIdentifier);
             });
 
             return key;
@@ -123,28 +123,5 @@ namespace OtpSharp
                     return 20;
             }
         }
-
-        #region key utilities
-
-        internal static byte[] Combine(params byte[][] arrays)
-        {
-            byte[] rv = new byte[arrays.Sum(a => a.Length)];
-            int offset = 0;
-            foreach (byte[] array in arrays)
-            {
-                System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
-                offset += array.Length;
-            }
-            return rv;
-        }
-
-        internal static void Destroy(byte[] sensetiveData)
-        {
-            if (sensetiveData == null)
-                throw new ArgumentNullException("sensetiveData");
-            new Random().NextBytes(sensetiveData);
-        }
-
-        #endregion
     }
 }

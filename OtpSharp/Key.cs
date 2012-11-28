@@ -30,8 +30,8 @@ namespace OtpSharp
             }
             finally
             {
-                // wipe the key from memory by writing random stuff out to it
-                new Random().NextBytes(plainKey);
+                // wipe the key from memory by writing random stuff out to it as best as we can
+                KeyUtilities.Destroy(plainKey);
             }
         }
 
