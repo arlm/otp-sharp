@@ -80,7 +80,7 @@ namespace OtpSharp
                         }
                     }
                     DateTime networkTime;
-                    if (ParseResponse(response, out networkTime))
+                    if (TryParseResponse(response, out networkTime))
                     {
                         return new TimeCorrection(networkTime);
                     }
@@ -150,7 +150,7 @@ namespace OtpSharp
         }
 
         const string pattern = @"([0-9]{2}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})";
-        private static bool ParseResponse(string response, out DateTime ntpUtc)
+        internal static bool TryParseResponse(string response, out DateTime ntpUtc)
         {
             if (response.ToUpperInvariant().Contains("UTC(NIST)"))
             {

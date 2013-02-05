@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Base32Tests.cs" />
     <Compile Include="KeyGenerationTests.cs" />
+    <Compile Include="NtpTests.cs" />
     <Compile Include="OtpClassValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OtpCalculationTests.cs" />

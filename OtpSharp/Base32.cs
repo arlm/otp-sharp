@@ -13,17 +13,21 @@ namespace OtpSharp
         /// <summary>
         /// The number of bits in a base32 encoded character
         /// </summary>
-        const int encodedBitCount = 5;
+        private const int encodedBitCount = 5;
         /// <summary>
         /// The number of bits in a byte
         /// </summary>
-        const int byteBitCount = 8;
+        private const int byteBitCount = 8;
         /// <summary>
         /// A string containing all of the base32 characters in order.
         /// This allows a simple indexof or [index] to convert between
         /// a numeric value and an encoded character and vice versa.
         /// </summary>
-        const string encodingChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        private const string encodingChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        /// <summary>
+        /// The rfc defines '=' as the padding character
+        /// </summary>
+        private const char paddingCharacter = '=';
         /// <summary>
         /// Takes a block of data and converts it to a base 32 encoded string
         /// </summary>
@@ -71,8 +75,7 @@ namespace OtpSharp
             // Since the outputCharacterCount does account for the paddingCharacters, fill it out
             while (currentPosition < outputCharacterCount)
             {
-                // The RFC defined paddinc char is '='
-                outputBuffer[currentPosition++] = '=';
+                outputBuffer[currentPosition++] = paddingCharacter;
             }
 
             return new string(outputBuffer);
@@ -88,7 +91,7 @@ namespace OtpSharp
             if (string.IsNullOrEmpty(base32))
                 throw new ArgumentNullException("base32");
 
-            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
+            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd(paddingCharacter);
 
             foreach (var c in unpaddedBase32)
             {
