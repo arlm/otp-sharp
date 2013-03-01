@@ -63,7 +63,7 @@ namespace OtpSharp
             var key = new ProtectedKey(plaintextKey);
             // the protected key creates a copy of the key and pads it as needed for in memory protection.
             // Thus the reference that was passed in isn't needed.  Overwrite it with random garbage.
-            new Random().NextBytes(plaintextKey);
+            KeyUtilities.Destroy(plaintextKey);
             return key;
         }
 
