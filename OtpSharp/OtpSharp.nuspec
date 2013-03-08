@@ -20,7 +20,11 @@ The implementation includes the code calculation as well as simple verification.
 For documentation please visit the project website.</description>
         <summary>An implementation of HOTP or HMAC One Time Paswords (RFC 4226) and TOTP or Timed One Time Passwords (RFC 6238) in C#.  Additionally contains a base 32 encoder.</summary>
     <copyright>Copyright 2012-2013 Devin Martin</copyright>
-<releaseNotes>1.0.4 Changed the Protected Key API to be more explicit (may break existing direct useage of the protected key)
+<releaseNotes>1.0.6 Change the computed values from ints to padded strings. (Breaking change but is a more appropriate API)
+
+1.0.5 Change package name from OTP-Sharp to OtpSharp
+
+1.0.4 Changed the Protected Key API to be more explicit (may break existing direct useage of the protected key)
 
 The protected key no longer implicitly causes side effects (destroying the plaintext key provided must be done explicitly)
 

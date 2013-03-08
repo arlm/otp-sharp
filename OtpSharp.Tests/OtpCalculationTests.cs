@@ -31,7 +31,6 @@ namespace OtpSharp.Tests
         /// </summary>
         public TestContext TestContext { get; set; }
 
-
         [TestMethod]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
             "|DataDirectory|\\Rfc4226AppendixD.xml",
@@ -58,7 +57,7 @@ namespace OtpSharp.Tests
         {
             // test values from RFC - Appendix D
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
-            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["hotp"]);
+            string expectedResult = (string)this.TestContext.DataRow["hotp"];
 
             Hotp hotpCalculator = new Hotp(rfcTestKey);
             var hotp = hotpCalculator.ComputeHotp(counter);
@@ -75,7 +74,7 @@ namespace OtpSharp.Tests
         {
             // test values from RFC - Appendix D
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
-            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["hotp"]);
+            string expectedResult = (string)this.TestContext.DataRow["hotp"];
 
             Hotp hotpCalculator = new Hotp(new ProtectedKey(rfcTestKey));
             var hotp = hotpCalculator.ComputeHotp(counter);
@@ -92,7 +91,7 @@ namespace OtpSharp.Tests
         {
             // test values from RFC - Appendix D
             var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
-            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["totp"]);
+            string expectedResult = (string)this.TestContext.DataRow["totp"];
 
             OtpHashMode mode;
             byte[] key;
@@ -113,7 +112,7 @@ namespace OtpSharp.Tests
         {
             // test values from RFC - Appendix D
             var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
-            long expectedResult = Convert.ToInt32(this.TestContext.DataRow["totp"]);
+            string expectedResult = (string)this.TestContext.DataRow["totp"];
 
             OtpHashMode mode;
             byte[] key;
@@ -123,6 +122,41 @@ namespace OtpSharp.Tests
             var hotp = totpCalculator.ComputeTotp(time);
 
             Assert.AreEqual(expectedResult, hotp);
+        }
+
+        /// <summary>
+        /// Ensures that the padding is correct
+        /// </summary>
+        [TestMethod]
+        public void HotpPaddingTest()
+        {
+            var hotpCalculator = new Hotp(rfcTestKey);
+            var hotp = hotpCalculator.ComputeHotp(25193);
+            Assert.AreEqual("000039", hotp);
+        }
+
+        /// <summary>
+        /// Ensures that the padding is correct
+        /// </summary>
+        [TestMethod]
+        public void Totp8DigitPaddingTest()
+        {
+            var totpCalculator = new Totp(rfcTestKey, totpSize:8);
+            var date = new DateTime(1970, 1, 19, 13, 23, 00);
+            var totp = totpCalculator.ComputeTotp(date);
+            Assert.AreEqual("00003322", totp);
+        }
+
+        /// <summary>
+        /// Ensures that the padding is correct
+        /// </summary>
+        [TestMethod]
+        public void Totp6DigitPaddingTest()
+        {
+            var totpCalculator = new Totp(rfcTestKey, totpSize: 6);
+            var date = new DateTime(1970, 1, 19, 13, 23, 00);
+            var totp = totpCalculator.ComputeTotp(date);
+            Assert.AreEqual("003322", totp);
         }
 
         private void GetMode(string mode, out OtpHashMode outputMode, out byte[] key)

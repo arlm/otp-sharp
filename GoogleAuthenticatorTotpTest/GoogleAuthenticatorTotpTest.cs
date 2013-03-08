@@ -38,7 +38,7 @@ namespace GoogleAuthenticatorTotpTest
 
         private void UpdateCode()
         {
-            this.labelTotp.Text = totp.ComputeTotp().ToString().PadLeft(this.digits, '0');
+            this.labelTotp.Text = totp.ComputeTotp();
             this.labelRemaining.Text = totp.RemainingSeconds().ToString();
         }
 
@@ -67,16 +67,14 @@ namespace GoogleAuthenticatorTotpTest
         {
             var text = this.textBoxValue.Text;
             this.textBoxValue.Text = string.Empty;
-            int value;
-            if (int.TryParse(text, out value))
-            {
-                long windowUsed;
-                bool result = totp.VerifyTotp(value, out windowUsed, new VerificationWindow(1, 0));
-                if (result)
-                    this.tabPage2.BackColor = Color.Green;
-                else
-                    this.tabPage2.BackColor = Color.Red;
-            }
+
+
+            long windowUsed;
+            bool result = totp.VerifyTotp(text, out windowUsed, new VerificationWindow(1, 0));
+            if (result)
+                this.tabPage2.BackColor = Color.Green;
+            else
+                this.tabPage2.BackColor = Color.Red;
         }
 
         private int stepSize

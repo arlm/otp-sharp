@@ -29,7 +29,7 @@ namespace OtpSharp
         /// </summary>
         /// <param name="counter">the counter to be incremented each time this method is called</param>
         /// <returns>Hotp</returns>
-        public int ComputeHotp(long counter)
+        public string ComputeHotp(long counter)
         {
             return Digits(this.ComputeHotpDecimal(counter), 6); // all of the HOTP values are six digits long
         }
@@ -41,7 +41,8 @@ namespace OtpSharp
         /// </remarks>
         internal long ComputeHotpDecimal(long counter)
         {
-            return this.Compute(counter);
+            var hashData = GetBigEndianBytes(counter);
+            return this.CalculateOtp(hashData, OtpHashMode.Sha1);
         }
 
         /// <summary>
@@ -49,10 +50,10 @@ namespace OtpSharp
         /// </summary>
         /// <param name="counter">Counter or step</param>
         /// <returns>HOTP calculated code</returns>
-        protected override long Compute(long counter)
+        protected override string Compute(long counter)
         {
-            var hashData = GetBigEndianBytes(counter);
-            return this.CalculateOtp(hashData, OtpHashMode.Sha1);
+            var rawValue = ComputeHotpDecimal(counter);
+            return Otp.Digits(rawValue, 6);
         }
 
         /// <summary>

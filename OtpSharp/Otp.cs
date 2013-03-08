@@ -52,7 +52,7 @@ namespace OtpSharp
         /// </summary>
         /// <param name="counter">Counter or step</param>
         /// <returns>OTP calculated code</returns>
-        protected abstract long Compute(long counter);
+        protected abstract string Compute(long counter);
 
         /// <summary>
         /// Helper method that calculates OTPs
@@ -131,9 +131,10 @@ namespace OtpSharp
         /// <summary>
         /// truncates a number down to the specified number of digits
         /// </summary>
-        protected internal static int Digits(long input, int digitCount)
+        protected internal static string Digits(long input, int digitCount)
         {
-            return ((int)input % (int)Math.Pow(10, digitCount));
+            var truncatedValue = ((int)input % (int)Math.Pow(10, digitCount));
+            return truncatedValue.ToString().PadLeft(digitCount, '0');
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace OtpSharp
         /// <param name="matchedStep">Output parameter that provides the step where the match was found.  If no match was found it will be 0</param>
         /// <param name="window">The window to verify</param>
         /// <returns>True if a match is found</returns>
-        protected bool Verify(long initialStep, int valueToVerify, out long matchedStep, VerificationWindow window)
+        protected bool Verify(long initialStep, string valueToVerify, out long matchedStep, VerificationWindow window)
         {
             if (window == null)
                 window = new VerificationWindow();
