@@ -59,7 +59,7 @@ namespace OtpSharp
         /// </summary>
         protected internal long CalculateOtp(byte[] data, OtpHashMode mode)
         {
-            byte[] hmacComputedHash = this.ComputeHmacHash(data, mode);
+            byte[] hmacComputedHash = this.secretKey.ComputeHmac(mode, data);
 
             // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
             // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
@@ -69,49 +69,6 @@ namespace OtpSharp
                 | (hmacComputedHash[offset + 1] & 0xff) << 16
                 | (hmacComputedHash[offset + 2] & 0xff) << 8
                 | (hmacComputedHash[offset + 3] & 0xff) % 1000000;
-        }
-
-        /// <summary>
-        /// Uses the protected key to compute an HMAC Hash
-        /// </summary>
-        /// <param name="input">The data to use as the HMAC input</param>
-        /// <param name="mode">The Hash algorithm to use</param>
-        /// <returns>The hashed data</returns>
-        public byte[] ComputeHmacHash(byte[] input, OtpHashMode mode)
-        {
-            byte[] hashedValue = null;
-
-            using (HMAC hmac = CreateHmacHash(mode))
-            {
-                this.secretKey.UsePlainKey(key =>
-                {
-                    hmac.Key = key;
-                    hashedValue = hmac.ComputeHash(input);
-                });
-            }
-
-            return hashedValue;
-        }
-
-        /// <summary>
-        /// Create an HMAC object for the specified algorithm
-        /// </summary>
-        private static HMAC CreateHmacHash(OtpHashMode otpHashMode)
-        {
-            HMAC hmacAlgorithm = null;
-            switch (otpHashMode)
-            {
-                case OtpHashMode.Sha256:
-                    hmacAlgorithm = new HMACSHA256();
-                    break;
-                case OtpHashMode.Sha512:
-                    hmacAlgorithm = new HMACSHA512();
-                    break;
-                default: //case OtpHashMode.Sha1:
-                    hmacAlgorithm = new HMACSHA1();
-                    break;
-            }
-            return hmacAlgorithm;
         }
 
         /// <summary>
@@ -147,37 +104,6 @@ namespace OtpSharp
 
             matchedStep = 0;
             return false;
-        }
-
-#if NO_WEB
-#else
-
-        /// <summary>
-        /// Gets a URL that conforms to the de-facto standard
-        /// created and used by Google
-        /// </summary>
-        protected string GetBaseKeyUrl(string user)
-        {
-            string url = null;
-            this.secretKey.UsePlainKey(key =>
-            {
-                url = string.Format("otpauth://{0}/{1}?secret={2}", this.OtpType, HttpUtility.UrlEncode(user), Base32.Encode(key));
-            });
-
-            return url;
-        }
-#endif
-        /// <summary>
-        /// Used in generating URLs
-        /// </summary>
-        protected abstract string OtpType { get; }
-
-        /// <remarks>
-        /// This method simply exists for tests
-        /// </remarks>
-        internal string GetOtpType()
-        {
-            return this.OtpType;
         }
     }
 }

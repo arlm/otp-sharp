@@ -55,10 +55,5 @@ namespace OtpSharp
             var rawValue = ComputeHotpDecimal(counter);
             return Otp.Digits(rawValue, 6); // all of the HOTP values are six digits long
         }
-
-        /// <summary>
-        /// Used in generating URLs.  HOTP
-        /// </summary>
-        protected override string OtpType { get { return "hotp"; } }
     }
 }

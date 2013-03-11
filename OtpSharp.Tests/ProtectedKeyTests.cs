@@ -28,7 +28,7 @@ namespace OtpSharp.Tests
         public void ProtectedKey_Basic()
         {
             var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key));
+            CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, pk.GetCopyOfKey());
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace OtpSharp.Tests
 
             var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
 
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
+            CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace OtpSharp.Tests
 
             var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.CrossProcess);
 
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
+            CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace OtpSharp.Tests
 
             var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameLogon);
 
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
+            CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
         [TestMethod]
@@ -137,7 +137,7 @@ namespace OtpSharp.Tests
             // The key is protected and un-protected several times.
             // Make sure that the key can be used multiple times.
             for (int i = 0; i < 10; i++)
-                pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key));
+                CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
         [TestMethod]
@@ -152,52 +152,7 @@ namespace OtpSharp.Tests
 
             var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 20, MemoryProtectionScope.SameProcess);
 
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(originalKey, key, "The unprotected plain key and the original key don't match"));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ProtectedKey_UseKeyWithNullDelegate()
-        {
-            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
-            pk.UsePlainKey(null);
-        }
-
-        [TestMethod]
-        public void ProtectedKey_UseKeyWipeTempKey()
-        {
-            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
-            byte[] tempKey = null;
-            pk.UsePlainKey(key =>
-            {
-                tempKey = key;
-                CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, tempKey);
-            });
-
-            CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, tempKey);
-        }
-
-        [TestMethod]
-        public void ProtectedKey_UseKeyThrowExceptionWipeKey()
-        {
-            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
-            byte[] tempKey = null;
-
-            try
-            {
-                pk.UsePlainKey(key =>
-                {
-                    tempKey = key;
-                    CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, tempKey);
-                    throw new ArgumentNullException(); // Throw a specific exception type of argument null as this is what is caught below
-                });
-
-                Assert.Fail("The exception should have diverted control away from here.");
-            }
-            catch (ArgumentNullException) // Catch a specific argument null exception so as not to catch assert exceptions if thrown
-            {
-                CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, tempKey);
-            }
+            CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey(), "The unprotected plain key and the original key don't match");
         }
     }
 }

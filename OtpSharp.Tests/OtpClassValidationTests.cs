@@ -92,19 +92,5 @@ namespace OtpSharp.Tests
         {
             var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 10);
         }
-
-        [TestMethod]
-        public void TotpTypeProperty()
-        {
-            var totp= new Totp(OtpCalculationTests.RfcTestKey);
-            Assert.AreEqual("totp", totp.GetOtpType());
-        }
-
-        [TestMethod]
-        public void HotpTypeProperty()
-        {
-            var hotp = new Hotp(OtpCalculationTests.RfcTestKey);
-            Assert.AreEqual("hotp", hotp.GetOtpType());
-        }
     }
 }

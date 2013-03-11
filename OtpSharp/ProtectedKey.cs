@@ -124,8 +124,11 @@ namespace OtpSharp
         /// <summary>
         /// Gets a copy of the plaintext key
         /// </summary>
+        /// <remarks>
+        /// This is internal rather than protected so that the tests can use this method
+        /// </remarks>
         /// <returns>Plaintext Key</returns>
-        protected override byte[] GetCopyOfKey()
+        internal byte[] GetCopyOfKey()
         {
             var plainKey = new byte[this.keyLength];
             lock (this.stateSync)
@@ -149,6 +152,53 @@ namespace OtpSharp
                 }
             }
             return plainKey;
+        }
+
+        /// <summary>
+        /// Uses the key to get an HMAC using the specified algorithm and data
+        /// </summary>
+        /// <param name="mode">The HMAC algorithm to use</param>
+        /// <param name="data">The data used to compute the HMAC</param>
+        /// <returns>HMAC of the key and data</returns>
+        public override byte[] ComputeHmac(OtpHashMode mode, byte[] data)
+        {
+            byte[] hashedValue = null;
+            using (HMAC hmac = CreateHmacHash(mode))
+            {
+                byte[] key = this.GetCopyOfKey();
+                try
+                {
+                    hmac.Key = key;
+                    hashedValue = hmac.ComputeHash(data);
+                }
+                finally
+                {
+                    KeyUtilities.Destroy(key);
+                }
+            }
+
+            return hashedValue;
+        }
+
+        /// <summary>
+        /// Create an HMAC object for the specified algorithm
+        /// </summary>
+        private static HMAC CreateHmacHash(OtpHashMode otpHashMode)
+        {
+            HMAC hmacAlgorithm = null;
+            switch (otpHashMode)
+            {
+                case OtpHashMode.Sha256:
+                    hmacAlgorithm = new HMACSHA256();
+                    break;
+                case OtpHashMode.Sha512:
+                    hmacAlgorithm = new HMACSHA512();
+                    break;
+                default: //case OtpHashMode.Sha1:
+                    hmacAlgorithm = new HMACSHA1();
+                    break;
+            }
+            return hmacAlgorithm;
         }
     }
 }

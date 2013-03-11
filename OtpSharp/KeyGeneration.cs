@@ -32,17 +32,6 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// Generates a key in accordance with the RFC recommened length for each algorithm
-        /// </summary>
-        /// <param name="mode">HashMode</param>
-        /// <returns>Key</returns>
-        [Obsolete("Please use KeyGeneration.GenerateRandomKey instead")]
-        public static byte[] GenerateKey(OtpHashMode mode = OtpHashMode.Sha1)
-        {
-            return GenerateRandomKey(mode);
-        }
-
-        /// <summary>
         /// Generates a random key in accordance with the RFC recommened length for each algorithm
         /// </summary>
         /// <param name="mode">HashMode</param>
@@ -63,16 +52,7 @@ namespace OtpSharp
         {
             if (masterKey == null)
                 throw new ArgumentNullException("masterKey");
-            byte[] key = null;
-            masterKey.UsePlainKey(plainMasterKey =>
-            {
-                var hashAlgorithm = GetHashAlgorithmForMode(mode);
-                var masterKeyWithPublicIdentifier = plainMasterKey.Concat(publicIdentifier).ToArray();
-                key = hashAlgorithm.ComputeHash(masterKeyWithPublicIdentifier);
-                KeyUtilities.Destroy(masterKeyWithPublicIdentifier);
-            });
-
-            return key;
+            return masterKey.ComputeHmac(mode, publicIdentifier);
         }
 
         /// <summary>

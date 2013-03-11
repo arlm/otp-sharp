@@ -196,42 +196,5 @@ namespace OtpSharp
             var otp = this.CalculateOtp(data, this.hashMode);
             return Digits(otp, this.totpSize);
         }
-
-        /// <summary>
-        /// Used in generating URLs.  TOTP
-        /// </summary>
-        protected override string OtpType { get { return "totp"; } }
-
-        // NO_WEB is useful in cases where only a client profile is available
-#if NO_WEB
-#else
-        /// <summary>
-        /// Gets a URL that conforms to the de-facto standard
-        /// created and used by Google
-        /// </summary>
-        public string GetKeyUrl(string user)
-        {
-            if (string.IsNullOrEmpty(user))
-                throw new ArgumentNullException("user");
-
-            var url = this.GetBaseKeyUrl(user);
-
-            if (this.hashMode != OtpHashMode.Sha1)
-                url += string.Format(CultureInfo.InvariantCulture.NumberFormat, "&algorithm={0}", this.hashMode);
-
-            if (this.step != 30)
-                url += string.Format(CultureInfo.InvariantCulture.NumberFormat, "&period={0}", this.step);
-
-            if (this.totpSize != 6)
-            {
-                if (this.totpSize == 8)
-                    url += "&digits=8";
-                else
-                    throw new ArgumentException("The URL format doesn't allow for a digit size other than 8 or 6");
-            }
-
-            return url;
-        }
-#endif
     }
 }

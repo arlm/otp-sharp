@@ -8,7 +8,7 @@
     <ProjectGuid>{DF432B25-4EBE-4C89-B7BD-0553CB6301B9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <RootNamespace>OtpSharp</RootNamespace>
     <AssemblyName>OtpSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -53,9 +53,11 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hotp.cs" />
     <Compile Include="Key.cs" />
+    <Compile Include="KeyUrl.cs" />
     <Compile Include="KeyUtilities.cs" />
     <Compile Include="Ntp.cs" />
     <Compile Include="NtpException.cs" />
+    <Compile Include="OtpType.cs" />
     <Compile Include="TimeCorrection.cs" />
     <Compile Include="ProtectedKey.cs" />
     <Compile Include="OtpHashMode.cs" />

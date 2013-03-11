@@ -32,9 +32,9 @@ namespace GoogleAuthenticatorTotpTest
             if (string.IsNullOrWhiteSpace(name))
                 name = "OtpSharp@test.com";
 
-            this.pictureBox1.ImageLocation = string.Format("http://qrcode.kaywa.com/img.php?s=4&d={0}", HttpUtility.UrlEncode(totp.GetKeyUrl(name)));
+            string url = KeyUrl.GetTotpUrl(rfcKey, name, step: this.stepSize, totpSize: this.digits);
+            this.pictureBox1.ImageLocation = string.Format("http://qrcode.kaywa.com/img.php?s=4&d={0}", HttpUtility.UrlEncode(url));
         }
-
 
         private void UpdateCode()
         {

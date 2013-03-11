@@ -109,40 +109,35 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void TotpUrl()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user");
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
         [TestMethod]
         public void TotpUrl_Sha256()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, mode: OtpHashMode.Sha256);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", mode: OtpHashMode.Sha256);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&algorithm=Sha256", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
         [TestMethod]
         public void TotpUrl_Sha512()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, mode: OtpHashMode.Sha512);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", mode: OtpHashMode.Sha512);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&algorithm=Sha512", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
         [TestMethod]
         public void TotpUrl_StepSizeFifteen()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, step: 15);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", step: 15);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&period=15", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
         [TestMethod]
         public void TotpUrl_DigitsEight()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 8);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", totpSize: 8);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&digits=8", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
@@ -150,23 +145,20 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void TotpUrl_DigitsTen()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 10);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", totpSize: 10);
         }
 
         [TestMethod]
         public void TotpUrl_Sha512AndStepSizeFifteen()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, step: 15, mode: OtpHashMode.Sha512);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", step: 15, mode: OtpHashMode.Sha512);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&algorithm=Sha512&period=15", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
         [TestMethod]
         public void TotpUrl_Sha512AndStepSizeFifteenDigitsEight()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey, step: 15, mode: OtpHashMode.Sha512, totpSize: 8);
-            var url = hotp.GetKeyUrl("user");
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", step: 15, mode: OtpHashMode.Sha512, totpSize: 8);
             Assert.AreEqual(string.Format("otpauth://totp/user?secret={0}&algorithm=Sha512&period=15&digits=8", Base32.Encode(OtpCalculationTests.RfcTestKey)), url);
         }
 
@@ -174,16 +166,28 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_EmptyUser()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey);
-            var url = hotp.GetKeyUrl(string.Empty);
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_NullUser()
         {
-            var hotp = new Totp(OtpCalculationTests.RfcTestKey);
-            var url = hotp.GetKeyUrl(null);
+            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TotpUrl_NullKey()
+        {
+            var url = KeyUrl.GetTotpUrl(null, "user");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TotpUrl_EmptyKey()
+        {
+            var url = KeyUrl.GetTotpUrl(new byte[] { }, "user");
         }
 
         [TestMethod]
