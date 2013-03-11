@@ -14,17 +14,6 @@ namespace OtpSharp
         /// </summary>
         /// <param name="length">Key length</param>
         /// <returns>The generated key</returns>
-        [Obsolete("Please use KeyGeneration.GenerateRandomKey instead")]
-        public static byte[] GenerateKey(int length)
-        {
-            return GenerateRandomKey(length);
-        }
-
-        /// <summary>
-        /// Generates a random key in accordance with the RFC recommened length for each algorithm
-        /// </summary>
-        /// <param name="length">Key length</param>
-        /// <returns>The generated key</returns>
         public static byte[] GenerateRandomKey(int length)
         {
             byte[] key = new byte[length];
@@ -78,7 +67,7 @@ namespace OtpSharp
             masterKey.UsePlainKey(plainMasterKey =>
             {
                 var hashAlgorithm = GetHashAlgorithmForMode(mode);
-                var masterKeyWithPublicIdentifier = KeyUtilities.Combine(plainMasterKey, publicIdentifier);
+                var masterKeyWithPublicIdentifier = plainMasterKey.Concat(publicIdentifier).ToArray();
                 key = hashAlgorithm.ComputeHash(masterKeyWithPublicIdentifier);
                 KeyUtilities.Destroy(masterKeyWithPublicIdentifier);
             });
@@ -95,7 +84,7 @@ namespace OtpSharp
         /// <returns>Derived key</returns>
         public static byte[] DeriveKeyFromMaster(Key masterKey, int serialNumber, OtpHashMode mode = OtpHashMode.Sha1)
         {
-            return DeriveKeyFromMaster(masterKey, BitConverter.GetBytes(serialNumber), mode);
+            return DeriveKeyFromMaster(masterKey, KeyUtilities.GetBigEndianBytes(serialNumber), mode);
         }
 
         private static HashAlgorithm GetHashAlgorithmForMode(OtpHashMode mode)

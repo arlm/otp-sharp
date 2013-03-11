@@ -13,7 +13,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ContractTestKeySize_Success()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey);
+            var t = new Totp(OtpCalculationTests.RfcTestKey);
         }
 
         [TestMethod]
@@ -50,60 +50,60 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Zero()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, step: 0);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, step: 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Negative()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, step: -1);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, step: -1);
         }
 
         [TestMethod]
         public void StepSize_Fifteen()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, step: 15);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, step: 15);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Zero()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, totpSize: 0);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Negative()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, totpSize: -1);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: -1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Eleven()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, totpSize: 11);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 11);
         }
 
         [TestMethod]
         public void Digits_Ten()
         {
-            var t = new Totp(OtpCalculationTests.rfcTestKey, totpSize: 10);
+            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 10);
         }
 
         [TestMethod]
         public void TotpTypeProperty()
         {
-            var totp= new Totp(OtpCalculationTests.rfcTestKey);
+            var totp= new Totp(OtpCalculationTests.RfcTestKey);
             Assert.AreEqual("totp", totp.GetOtpType());
         }
 
         [TestMethod]
         public void HotpTypeProperty()
         {
-            var hotp = new Hotp(OtpCalculationTests.rfcTestKey);
+            var hotp = new Hotp(OtpCalculationTests.RfcTestKey);
             Assert.AreEqual("hotp", hotp.GetOtpType());
         }
     }

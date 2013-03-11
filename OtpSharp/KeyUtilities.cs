@@ -11,23 +11,6 @@ namespace OtpSharp
     internal class KeyUtilities
     {
         /// <summary>
-        /// Concatinate two byte arrays together
-        /// </summary>
-        /// <param name="arrays">The two arrays to concatinate</param>
-        /// <returns></returns>
-        internal static byte[] Combine(params byte[][] arrays)
-        {
-            byte[] rv = new byte[arrays.Sum(a => a.Length)];
-            int offset = 0;
-            foreach (byte[] array in arrays)
-            {
-                System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
-                offset += array.Length;
-            }
-            return rv;
-        }
-
-        /// <summary>
         /// Overwrite potentially sensetive data with random junk
         /// </summary>
         /// <remarks>
@@ -43,6 +26,34 @@ namespace OtpSharp
             if (sensetiveData == null)
                 throw new ArgumentNullException("sensetiveData");
             new Random().NextBytes(sensetiveData);
+        }
+
+        /// <summary>
+        /// converts a long into a big endian byte array.
+        /// </summary>
+        /// <remarks>
+        /// RFC 4226 specifies big endian as the method for converting the counter to data to hash.
+        /// </remarks>
+        static internal byte[] GetBigEndianBytes(long input)
+        {
+            // Since .net uses little endian numbers, we need to reverse the byte order to get big endian.
+            var data = BitConverter.GetBytes(input);
+            Array.Reverse(data);
+            return data;
+        }
+
+        /// <summary>
+        /// converts an int into a big endian byte array.
+        /// </summary>
+        /// <remarks>
+        /// RFC 4226 specifies big endian as the method for converting the counter to data to hash.
+        /// </remarks>
+        static internal byte[] GetBigEndianBytes(int input)
+        {
+            // Since .net uses little endian numbers, we need to reverse the byte order to get big endian.
+            var data = BitConverter.GetBytes(input);
+            Array.Reverse(data);
+            return data;
         }
     }
 }

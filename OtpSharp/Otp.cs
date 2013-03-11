@@ -115,20 +115,6 @@ namespace OtpSharp
         }
 
         /// <summary>
-        /// converts a long into a big endian byte array.
-        /// </summary>
-        /// <remarks>
-        /// RFC 4226 specifies big endian as the method for converting the counter to data to hash.
-        /// </remarks>
-        protected static internal byte[] GetBigEndianBytes(long input)
-        {
-            // Since .net uses little endian numbers, we need to reverse the byte order to get big endian.
-            var data = BitConverter.GetBytes(input);
-            Array.Reverse(data);
-            return data;
-        }
-
-        /// <summary>
         /// truncates a number down to the specified number of digits
         /// </summary>
         protected internal static string Digits(long input, int digitCount)

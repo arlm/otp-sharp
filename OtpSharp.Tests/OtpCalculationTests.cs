@@ -18,10 +18,11 @@ namespace OtpSharp.Tests
         /// <summary>
         /// This is the test key defined in the RFC
         /// </summary>
-        public static byte[] rfcTestKey
+        public static byte[] RfcTestKey
         {
             get
             {
+                // return a new key every time since some functionality will destroy the object referenc
                 return new byte[] { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30 };
             }
         }
@@ -42,7 +43,7 @@ namespace OtpSharp.Tests
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
             long expectedResult = Convert.ToInt64(this.TestContext.DataRow["decimal"]);
 
-            Hotp hotpCalculator = new Hotp(rfcTestKey);
+            Hotp hotpCalculator = new Hotp(RfcTestKey);
             var otp = hotpCalculator.ComputeHotpDecimal(counter);
 
             Assert.AreEqual(expectedResult, otp);
@@ -59,7 +60,7 @@ namespace OtpSharp.Tests
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
             string expectedResult = (string)this.TestContext.DataRow["hotp"];
 
-            Hotp hotpCalculator = new Hotp(rfcTestKey);
+            Hotp hotpCalculator = new Hotp(RfcTestKey);
             var hotp = hotpCalculator.ComputeHotp(counter);
 
             Assert.AreEqual(expectedResult, hotp);
@@ -76,7 +77,7 @@ namespace OtpSharp.Tests
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
             string expectedResult = (string)this.TestContext.DataRow["hotp"];
 
-            Hotp hotpCalculator = new Hotp(new ProtectedKey(rfcTestKey));
+            Hotp hotpCalculator = new Hotp(new ProtectedKey(RfcTestKey));
             var hotp = hotpCalculator.ComputeHotp(counter);
 
             Assert.AreEqual(expectedResult, hotp);
@@ -130,7 +131,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void HotpPaddingTest()
         {
-            var hotpCalculator = new Hotp(rfcTestKey);
+            var hotpCalculator = new Hotp(RfcTestKey);
             var hotp = hotpCalculator.ComputeHotp(25193);
             Assert.AreEqual("000039", hotp);
         }
@@ -141,7 +142,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void Totp8DigitPaddingTest()
         {
-            var totpCalculator = new Totp(rfcTestKey, totpSize:8);
+            var totpCalculator = new Totp(RfcTestKey, totpSize:8);
             var date = new DateTime(1970, 1, 19, 13, 23, 00);
             var totp = totpCalculator.ComputeTotp(date);
             Assert.AreEqual("00003322", totp);
@@ -153,7 +154,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void Totp6DigitPaddingTest()
         {
-            var totpCalculator = new Totp(rfcTestKey, totpSize: 6);
+            var totpCalculator = new Totp(RfcTestKey, totpSize: 6);
             var date = new DateTime(1970, 1, 19, 13, 23, 00);
             var totp = totpCalculator.ComputeTotp(date);
             Assert.AreEqual("003322", totp);
@@ -188,7 +189,7 @@ namespace OtpSharp.Tests
             int i = 0;
             do
             {
-                foreach (var b in rfcTestKey)
+                foreach (var b in RfcTestKey)
                 {
                     yield return b;
                     i++;

@@ -30,8 +30,6 @@ The protected key no longer implicitly causes side effects (destroying the plain
 
 Added a time correction class with experimental NTP abilities.
 
-Support for .net 3.5 as well as client profiles with some minor limitations.
-
 1.0.3 Fixed unexpected behavior where the plaintext key provided to an HOTP or TOTP object will be scrambled.  Now it will remain intact.  Added constructor overloads to provide a protected key instead of a byte array if desired.</releaseNotes>
     <tags>authentication OATH totp otp hotp base32 multi-factor two-factor factor security login OATH-HOTP OATH-TOTP</tags>
   </metadata>

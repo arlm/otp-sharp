@@ -50,8 +50,8 @@ namespace OtpSharp.Tests
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(5));
 
-            var totp = new Totp(OtpCalculationTests.rfcTestKey);
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var totp = new Totp(OtpCalculationTests.RfcTestKey);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
 
             var standardRemaining = totp.RemainingSeconds();
             var correctedRemaining = correctedTotp.RemainingSeconds();
@@ -72,8 +72,8 @@ namespace OtpSharp.Tests
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
 
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
-            var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
+            var uncorrectedTotp = new Totp(OtpCalculationTests.RfcTestKey);
 
             var uncorrectedCode = uncorrectedTotp.ComputeTotp(DateTime.UtcNow.AddSeconds(100));
             var correctedCode = correctedTotp.ComputeTotp();
@@ -86,8 +86,8 @@ namespace OtpSharp.Tests
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
 
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
-            var uncorrectedTotp = new Totp(OtpCalculationTests.rfcTestKey);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
+            var uncorrectedTotp = new Totp(OtpCalculationTests.RfcTestKey);
 
             var code = correctedTotp.ComputeTotp();
 
@@ -103,7 +103,7 @@ namespace OtpSharp.Tests
         public void TimeCorrection_TotpRemainingSecondsSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(15));
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
 
             var specificRemaining = correctedTotp.RemainingSeconds(DateTime.UtcNow);
             var utcRemaining = correctedTotp.RemainingSeconds();
@@ -115,7 +115,7 @@ namespace OtpSharp.Tests
         public void TimeCorrection_TotpComputeTotpSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
 
             var specificCode = correctedTotp.ComputeTotp(DateTime.UtcNow);
             var utcCode = correctedTotp.ComputeTotp();
@@ -127,7 +127,7 @@ namespace OtpSharp.Tests
         public void TimeCorrection_TotpVerifyTotpSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
-            var correctedTotp = new Totp(OtpCalculationTests.rfcTestKey, timeCorrection: correction);
+            var correctedTotp = new Totp(OtpCalculationTests.RfcTestKey, timeCorrection: correction);
 
             var totpCode = correctedTotp.ComputeTotp();
 

@@ -192,7 +192,7 @@ namespace OtpSharp
         /// <returns>TOTP calculated code</returns>
         protected override string Compute(long counter)
         {
-            var data = GetBigEndianBytes(counter);
+            var data = KeyUtilities.GetBigEndianBytes(counter);
             var otp = this.CalculateOtp(data, this.hashMode);
             return Digits(otp, this.totpSize);
         }

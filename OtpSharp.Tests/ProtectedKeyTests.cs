@@ -27,16 +27,16 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_Basic()
         {
-            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
-            pk.UsePlainKey(key => CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, key));
+            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
+            pk.UsePlainKey(key => CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key));
         }
 
         [TestMethod]
         public void ProtectedKey_WipeReference()
         {
-            var key = OtpCalculationTests.rfcTestKey;
+            var key = OtpCalculationTests.RfcTestKey;
             var pk = ProtectedKey.CreateProtectedKeyAndDestroyPlaintextKey(key);
-            CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, key);
+            CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
         /// <remarks>
@@ -47,15 +47,15 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_EnsureOriginalkeyIntegrity()
         {
-            var key = OtpCalculationTests.rfcTestKey;
+            var key = OtpCalculationTests.RfcTestKey;
             var pk = new ProtectedKey(key);
-            CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, key);
+            CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
         [TestMethod]
         public void ProtectedKey_ProtectKey()
         {
-            var originalKey = KeyGeneration.GenerateKey(16);
+            var originalKey = KeyGeneration.GenerateRandomKey(16);
             var originalCopy = new byte[16];
             Array.Copy(originalKey, originalCopy, 16);
             CollectionAssert.AreEqual(originalKey, originalCopy);
@@ -71,7 +71,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_ProtectKey_CrossProcess()
         {
-            var originalKey = KeyGeneration.GenerateKey(16);
+            var originalKey = KeyGeneration.GenerateRandomKey(16);
             var originalCopy = new byte[16];
             Array.Copy(originalKey, originalCopy, 16);
             CollectionAssert.AreEqual(originalKey, originalCopy);
@@ -87,7 +87,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_ProtectKey_SameLogon()
         {
-            var originalKey = KeyGeneration.GenerateKey(16);
+            var originalKey = KeyGeneration.GenerateRandomKey(16);
             var originalCopy = new byte[16];
             Array.Copy(originalKey, originalCopy, 16);
             CollectionAssert.AreEqual(originalKey, originalCopy);
@@ -111,7 +111,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_ProtectKeyZeroLength()
         {
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.rfcTestKey, 0, MemoryProtectionScope.SameProcess);
+            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess);
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_MultipleUse()
         {
-            var originalKey = KeyGeneration.GenerateKey(16);
+            var originalKey = KeyGeneration.GenerateRandomKey(16);
             var originalCopy = new byte[16];
             Array.Copy(originalKey, originalCopy, 16);
             CollectionAssert.AreEqual(originalKey, originalCopy);
@@ -143,7 +143,7 @@ namespace OtpSharp.Tests
         [TestMethod]
         public void ProtectedKey_ProtectKeyWithSpecificLength()
         {
-            var originalKey = KeyGeneration.GenerateKey(20);
+            var originalKey = KeyGeneration.GenerateRandomKey(20);
             var originalCopy = new byte[32];
             Array.Copy(originalKey, originalCopy, 20);
 
@@ -159,28 +159,28 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ProtectedKey_UseKeyWithNullDelegate()
         {
-            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
+            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
             pk.UsePlainKey(null);
         }
 
         [TestMethod]
         public void ProtectedKey_UseKeyWipeTempKey()
         {
-            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
+            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
             byte[] tempKey = null;
             pk.UsePlainKey(key =>
             {
                 tempKey = key;
-                CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, tempKey);
+                CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, tempKey);
             });
 
-            CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, tempKey);
+            CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, tempKey);
         }
 
         [TestMethod]
         public void ProtectedKey_UseKeyThrowExceptionWipeKey()
         {
-            var pk = new ProtectedKey(OtpCalculationTests.rfcTestKey);
+            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
             byte[] tempKey = null;
 
             try
@@ -188,7 +188,7 @@ namespace OtpSharp.Tests
                 pk.UsePlainKey(key =>
                 {
                     tempKey = key;
-                    CollectionAssert.AreEqual(OtpCalculationTests.rfcTestKey, tempKey);
+                    CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, tempKey);
                     throw new ArgumentNullException(); // Throw a specific exception type of argument null as this is what is caught below
                 });
 
@@ -196,7 +196,7 @@ namespace OtpSharp.Tests
             }
             catch (ArgumentNullException) // Catch a specific argument null exception so as not to catch assert exceptions if thrown
             {
-                CollectionAssert.AreNotEqual(OtpCalculationTests.rfcTestKey, tempKey);
+                CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, tempKey);
             }
         }
     }
