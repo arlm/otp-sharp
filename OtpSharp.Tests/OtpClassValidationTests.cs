@@ -28,7 +28,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContractTestKeySize_ProtectedKeyNull()
         {
-            ProtectedKey key = null;
+            InMemoryKey key = null;
             var t = new Totp(key);
         }
 
@@ -43,7 +43,7 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void ContractTestKeySize_ProtectedKeyEmpty()
         {
-            var t = new Totp(new ProtectedKey(new byte[] { }));
+            var t = new Totp(new InMemoryKey(new byte[] { }));
         }
 
         [TestMethod]

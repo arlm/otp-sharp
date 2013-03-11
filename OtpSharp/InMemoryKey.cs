@@ -6,7 +6,7 @@ namespace OtpSharp
     /// <summary>
     /// Represents a protected key
     /// </summary>
-    public class ProtectedKey : Key
+    public class InMemoryKey : Key
     {
         #region platform supported
 
@@ -58,9 +58,9 @@ namespace OtpSharp
         /// </summary>
         /// <param name="plaintextKey">The key</param>
         /// <returns>A protected key instance from the provided key</returns>
-        public static ProtectedKey CreateProtectedKeyAndDestroyPlaintextKey(byte[] plaintextKey)
+        public static InMemoryKey CreateProtectedKeyAndDestroyPlaintextKey(byte[] plaintextKey)
         {
-            var key = new ProtectedKey(plaintextKey);
+            var key = new InMemoryKey(plaintextKey);
             // the protected key creates a copy of the key and pads it as needed for in memory protection.
             // Thus the reference that was passed in isn't needed.  Overwrite it with random garbage.
             KeyUtilities.Destroy(plaintextKey);
@@ -74,9 +74,9 @@ namespace OtpSharp
         /// <param name="keyLength">The length of the plaintext key (protected memory may need to be padded)</param>
         /// <param name="scope">The memory protection scope that was used to protect the memory</param>
         /// <returns>A protected key instance from the provided key</returns>
-        public static ProtectedKey CreateProtectedKeyFromPreProtectedMemory(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
+        public static InMemoryKey CreateProtectedKeyFromPreProtectedMemory(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
         {
-            return new ProtectedKey(preProtectedKey, keyLength, scope);
+            return new InMemoryKey(preProtectedKey, keyLength, scope);
         }
 
         #endregion
@@ -85,7 +85,7 @@ namespace OtpSharp
         /// Creates an instance of a protected key.
         /// </summary>
         /// <param name="key">Plaintext key data</param>
-        public ProtectedKey(byte[] key)
+        public InMemoryKey(byte[] key)
         {
             if (!(key != null))
                 throw new ArgumentNullException("A secret key must be provided");
@@ -106,7 +106,7 @@ namespace OtpSharp
             }
         }
 
-        private ProtectedKey(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
+        private InMemoryKey(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
         {
             if (!(preProtectedKey != null))
                 throw new ArgumentNullException("A secret key must be provided");

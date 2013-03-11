@@ -77,7 +77,7 @@ namespace OtpSharp.Tests
             long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
             string expectedResult = (string)this.TestContext.DataRow["hotp"];
 
-            Hotp hotpCalculator = new Hotp(new ProtectedKey(RfcTestKey));
+            Hotp hotpCalculator = new Hotp(new InMemoryKey(RfcTestKey));
             var hotp = hotpCalculator.ComputeHotp(counter);
 
             Assert.AreEqual(expectedResult, hotp);
@@ -119,7 +119,7 @@ namespace OtpSharp.Tests
             byte[] key;
             GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
 
-            var totpCalculator = new Totp(new ProtectedKey(key), mode: mode, totpSize: 8);
+            var totpCalculator = new Totp(new InMemoryKey(key), mode: mode, totpSize: 8);
             var hotp = totpCalculator.ComputeTotp(time);
 
             Assert.AreEqual(expectedResult, hotp);

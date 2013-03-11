@@ -14,20 +14,20 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_Empty()
         {
-            var key = new ProtectedKey(new byte[] { });
+            var key = new InMemoryKey(new byte[] { });
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ProtectedKey_Null()
         {
-            ProtectedKey key = new ProtectedKey(null);
+            InMemoryKey key = new InMemoryKey(null);
         }
 
         [TestMethod]
         public void ProtectedKey_Basic()
         {
-            var pk = new ProtectedKey(OtpCalculationTests.RfcTestKey);
+            var pk = new InMemoryKey(OtpCalculationTests.RfcTestKey);
             CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, pk.GetCopyOfKey());
         }
 
@@ -35,7 +35,7 @@ namespace OtpSharp.Tests
         public void ProtectedKey_WipeReference()
         {
             var key = OtpCalculationTests.RfcTestKey;
-            var pk = ProtectedKey.CreateProtectedKeyAndDestroyPlaintextKey(key);
+            var pk = InMemoryKey.CreateProtectedKeyAndDestroyPlaintextKey(key);
             CollectionAssert.AreNotEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
@@ -48,7 +48,7 @@ namespace OtpSharp.Tests
         public void ProtectedKey_EnsureOriginalkeyIntegrity()
         {
             var key = OtpCalculationTests.RfcTestKey;
-            var pk = new ProtectedKey(key);
+            var pk = new InMemoryKey(key);
             CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
@@ -63,7 +63,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
 
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
@@ -79,7 +79,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.CrossProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.CrossProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.CrossProcess);
 
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
@@ -95,7 +95,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameLogon);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameLogon);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameLogon);
 
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
@@ -104,21 +104,21 @@ namespace OtpSharp.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_ProtectKeyEmpty()
         {
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_ProtectKeyZeroLength()
         {
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ProtectedKey_ProtectKeyNull()
         {
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(null, 16, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(null, 16, MemoryProtectionScope.SameProcess);
         }
 
         [TestMethod]
@@ -132,7 +132,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 16, MemoryProtectionScope.SameProcess);
 
             // The key is protected and un-protected several times.
             // Make sure that the key can be used multiple times.
@@ -150,7 +150,7 @@ namespace OtpSharp.Tests
             ProtectedMemory.Protect(originalCopy, MemoryProtectionScope.SameProcess);
             CollectionAssert.AreNotEqual(originalKey, originalCopy);
 
-            var pk = ProtectedKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 20, MemoryProtectionScope.SameProcess);
+            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(originalCopy, 20, MemoryProtectionScope.SameProcess);
 
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey(), "The unprotected plain key and the original key don't match");
         }

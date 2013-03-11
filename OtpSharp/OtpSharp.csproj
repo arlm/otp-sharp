@@ -59,7 +59,7 @@
     <Compile Include="NtpException.cs" />
     <Compile Include="OtpType.cs" />
     <Compile Include="TimeCorrection.cs" />
-    <Compile Include="ProtectedKey.cs" />
+    <Compile Include="InMemoryKey.cs" />
     <Compile Include="OtpHashMode.cs" />
     <Compile Include="Otp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
