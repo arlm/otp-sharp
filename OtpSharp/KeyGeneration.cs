@@ -48,7 +48,7 @@ namespace OtpSharp
         /// <param name="publicIdentifier">The public identifier that is unique to the authenticating device</param>
         /// <param name="mode">The hash mode to use.  This will determine the resulting key lenght.  The default is sha-1 (as per the RFC) which is 20 bytes</param>
         /// <returns>Derived key</returns>
-        public static byte[] DeriveKeyFromMaster(Key masterKey, byte[] publicIdentifier, OtpHashMode mode = OtpHashMode.Sha1)
+        public static byte[] DeriveKeyFromMaster(IKeyProvider masterKey, byte[] publicIdentifier, OtpHashMode mode = OtpHashMode.Sha1)
         {
             if (masterKey == null)
                 throw new ArgumentNullException("masterKey");
@@ -62,7 +62,7 @@ namespace OtpSharp
         /// <param name="serialNumber">A serial number that is unique to the authenticating device</param>
         /// <param name="mode">The hash mode to use.  This will determine the resulting key lenght.  The default is sha-1 (as per the RFC) which is 20 bytes</param>
         /// <returns>Derived key</returns>
-        public static byte[] DeriveKeyFromMaster(Key masterKey, int serialNumber, OtpHashMode mode = OtpHashMode.Sha1)
+        public static byte[] DeriveKeyFromMaster(IKeyProvider masterKey, int serialNumber, OtpHashMode mode = OtpHashMode.Sha1)
         {
             return DeriveKeyFromMaster(masterKey, KeyUtilities.GetBigEndianBytes(serialNumber), mode);
         }

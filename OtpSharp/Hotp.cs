@@ -19,7 +19,7 @@ namespace OtpSharp
         /// Create an HOTP instance
         /// </summary>
         /// <param name="secretKey">The secret key to use in HOTP calculations</param>
-        public Hotp(Key secretKey)
+        public Hotp(IKeyProvider secretKey)
             : base(secretKey)
         {
         }

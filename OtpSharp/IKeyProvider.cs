@@ -3,9 +3,9 @@
 namespace OtpSharp
 {
     /// <summary>
-    /// Class used to represent a key
+    /// Interface used to interact with a key
     /// </summary>
-    public abstract class Key
+    public interface IKeyProvider
     {
         /// <summary>
         /// Uses the key to get an HMAC using the specified algorithm and data
@@ -19,6 +19,6 @@ namespace OtpSharp
         /// <param name="mode">The HMAC algorithm to use</param>
         /// <param name="data">The data used to compute the HMAC</param>
         /// <returns>HMAC of the key and data</returns>
-        public abstract byte[] ComputeHmac(OtpHashMode mode, byte[] data);
+        byte[] ComputeHmac(OtpHashMode mode, byte[] data);
     }
 }

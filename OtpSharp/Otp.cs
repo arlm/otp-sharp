@@ -18,7 +18,7 @@ namespace OtpSharp
         /// <summary>
         /// Secret key
         /// </summary>
-        protected readonly Key secretKey;
+        protected readonly IKeyProvider secretKey;
 
         /// <summary>
         /// Constructor for the abstract class.  This is to guarantee that all implementations have a secret key
@@ -39,7 +39,7 @@ namespace OtpSharp
         /// Constrocutor for the abstract class.  This is to guarantee that all implementations have a secret key
         /// </summary>
         /// <param name="secretKey"></param>
-        public Otp(Key secretKey)
+        public Otp(IKeyProvider secretKey)
         {
             if (!(secretKey != null))
                 throw new ArgumentNullException("A secret key must be provided");

@@ -55,7 +55,7 @@ namespace OtpSharp
         /// <param name="mode">The hash mode to use</param>
         /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
         /// <param name="timeCorrection">If required, a time correction can be specified to compensate of an out of sync local clock</param>
-        public Totp(Key secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
+        public Totp(IKeyProvider secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
             : base(secretKey)
         {
             VerifyParameters(step, totpSize);

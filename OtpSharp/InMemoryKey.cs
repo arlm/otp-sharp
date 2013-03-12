@@ -4,9 +4,24 @@ using System.Security.Cryptography;
 namespace OtpSharp
 {
     /// <summary>
-    /// Represents a protected key
+    /// Represents a key in memory
     /// </summary>
-    public class InMemoryKey : Key
+    /// <remarks>
+    /// This will attempt to use the Windows data protection api to encrypt the key in memory.
+    /// However, this type favors working over memory protection. This is an attempt to minimize
+    /// exposure in memory, nothing more. This protection is flawed in many ways.
+    /// 
+    /// In order to use the key to compute an hmac it must be temporarily decrypted, used,
+    /// then re-encrypted. This does expose the key in memory for a time. If a memory dump occurs in this time
+    /// the plaintext key will be part of it. Furthermore, there are potentially
+    /// artifacts from the hmac computation, GC compaction, or any number of other leaks even after
+    /// the key is re-encrypted.
+    /// 
+    /// This type favors working over memory protection. If the particular platform isn't supported then,
+    /// unless forced by modifying the IsPlatformSupported method, it will just store the key in a standard
+    /// byte array.
+    /// </remarks>
+    public class InMemoryKey : IKeyProvider
     {
         #region platform supported
 
@@ -17,6 +32,8 @@ namespace OtpSharp
         static bool IsPlatformSupported()
         {
             // if you want to force in memory protection over the application working, uncomment the return true;
+            // If the platform isn't actually supported but true is returned, the application won't work but it also
+            // won't store plaintext keys.
             // return true;
             lock (platformSupportSync)
             {
@@ -160,7 +177,7 @@ namespace OtpSharp
         /// <param name="mode">The HMAC algorithm to use</param>
         /// <param name="data">The data used to compute the HMAC</param>
         /// <returns>HMAC of the key and data</returns>
-        public override byte[] ComputeHmac(OtpHashMode mode, byte[] data)
+        public byte[] ComputeHmac(OtpHashMode mode, byte[] data)
         {
             byte[] hashedValue = null;
             using (HMAC hmac = CreateHmacHash(mode))
