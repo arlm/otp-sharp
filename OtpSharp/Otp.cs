@@ -21,10 +21,16 @@ namespace OtpSharp
         protected readonly IKeyProvider secretKey;
 
         /// <summary>
+        /// The hash mode to use
+        /// </summary>
+        protected readonly OtpHashMode hashMode;
+
+        /// <summary>
         /// Constructor for the abstract class.  This is to guarantee that all implementations have a secret key
         /// </summary>
         /// <param name="secretKey"></param>
-        public Otp(byte[] secretKey)
+        /// <param name="mode">The hash mode to use</param>
+        public Otp(byte[] secretKey, OtpHashMode mode)
         {
             if (!(secretKey != null))
                 throw new ArgumentNullException("secretKey");
@@ -33,26 +39,31 @@ namespace OtpSharp
 
             // when passing a key into the constructor the caller may depend on the reference to the key remaining intact.
             this.secretKey = new InMemoryKey(secretKey);
+
+            this.hashMode = mode;
         }
 
         /// <summary>
         /// Constrocutor for the abstract class.  This is to guarantee that all implementations have a secret key
         /// </summary>
         /// <param name="secretKey"></param>
-        public Otp(IKeyProvider secretKey)
+        /// <param name="mode">The hash mode to use</param>
+        public Otp(IKeyProvider secretKey, OtpHashMode mode)
         {
             if (!(secretKey != null))
                 throw new ArgumentNullException("A secret key must be provided");
 
             this.secretKey = secretKey;
+            this.hashMode = mode;
         }
 
         /// <summary>
         /// An abstract definition of a compute method.  Takes a counter and runs it through the derived algorithm.
         /// </summary>
         /// <param name="counter">Counter or step</param>
+        /// <param name="mode">The hash mode to use</param>
         /// <returns>OTP calculated code</returns>
-        protected abstract string Compute(long counter);
+        protected abstract string Compute(long counter, OtpHashMode mode);
 
         /// <summary>
         /// Helper method that calculates OTPs
@@ -95,7 +106,7 @@ namespace OtpSharp
                 window = new VerificationWindow();
             foreach (var frame in window.ValidationCandidates(initialStep))
             {
-                var comparisonValue = this.Compute(frame);
+                var comparisonValue = this.Compute(frame, this.hashMode);
                 if (comparisonValue == valueToVerify)
                 {
                     matchedStep = frame;

@@ -44,7 +44,7 @@ namespace OtpSharp.Tests
             long expectedResult = Convert.ToInt64(this.TestContext.DataRow["decimal"]);
 
             Hotp hotpCalculator = new Hotp(RfcTestKey);
-            var otp = hotpCalculator.ComputeHotpDecimal(counter);
+            var otp = hotpCalculator.ComputeHotpDecimal(counter, OtpHashMode.Sha1);
 
             Assert.AreEqual(expectedResult, otp);
         }

@@ -10,8 +10,9 @@ namespace OtpSharp
         /// Create an HOTP instance
         /// </summary>
         /// <param name="secretKey">The secret key to use in HOTP calculations</param>
-        public Hotp(byte[] secretKey)
-            : base(secretKey)
+        /// <param name="mode">The hash mode to use</param>
+        public Hotp(byte[] secretKey, OtpHashMode mode = OtpHashMode.Sha1)
+            : base(secretKey, mode)
         {
         }
 
@@ -19,8 +20,9 @@ namespace OtpSharp
         /// Create an HOTP instance
         /// </summary>
         /// <param name="secretKey">The secret key to use in HOTP calculations</param>
-        public Hotp(IKeyProvider secretKey)
-            : base(secretKey)
+        /// <param name="mode">The hash mode to use</param>
+        public Hotp(IKeyProvider secretKey, OtpHashMode mode = OtpHashMode.Sha1)
+            : base(secretKey, mode)
         {
         }
 
@@ -31,7 +33,7 @@ namespace OtpSharp
         /// <returns>Hotp</returns>
         public string ComputeHotp(long counter)
         {
-            return this.Compute(counter);
+            return this.Compute(counter, this.hashMode);
         }
 
         /// <remarks>
@@ -39,20 +41,21 @@ namespace OtpSharp
         /// The RFC defines a decimal value in the test table that is an
         /// intermediate step to a final HOTP value
         /// </remarks>
-        internal long ComputeHotpDecimal(long counter)
+        internal long ComputeHotpDecimal(long counter, OtpHashMode mode)
         {
             var hashData = KeyUtilities.GetBigEndianBytes(counter);
-            return this.CalculateOtp(hashData, OtpHashMode.Sha1);
+            return this.CalculateOtp(hashData, mode);
         }
 
         /// <summary>
         /// Takes a counter and runs it through the HOTP algorithm.
         /// </summary>
         /// <param name="counter">Counter or step</param>
+        /// <param name="mode">The hash mode to use</param>
         /// <returns>HOTP calculated code</returns>
-        protected override string Compute(long counter)
+        protected override string Compute(long counter, OtpHashMode mode)
         {
-            var rawValue = ComputeHotpDecimal(counter);
+            var rawValue = ComputeHotpDecimal(counter, mode);
             return Otp.Digits(rawValue, 6); // all of the HOTP values are six digits long
         }
     }

@@ -22,7 +22,6 @@ namespace OtpSharp
         const long ticksToSeconds = 10000000L;
 
         private readonly int step;
-        private readonly OtpHashMode hashMode;
         private readonly int totpSize;
         private readonly TimeCorrection correctedTime;
 
@@ -35,12 +34,11 @@ namespace OtpSharp
         /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
         /// <param name="timeCorrection">If required, a time correction can be specified to compensate of an out of sync local clock</param>
         public Totp(byte[] secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
-            : base(secretKey)
+            : base(secretKey, mode)
         {
             VerifyParameters(step, totpSize);
 
             this.step = step;
-            this.hashMode = mode;
             this.totpSize = totpSize;
 
             // we never null check the corrected time object.  Since it's readonly, we'll ensure that it isn't null here and provide neatral functionality in this case.
@@ -56,12 +54,11 @@ namespace OtpSharp
         /// <param name="totpSize">The number of digits that the returning TOTP should have.  The default is 6.</param>
         /// <param name="timeCorrection">If required, a time correction can be specified to compensate of an out of sync local clock</param>
         public Totp(IKeyProvider secretKey, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6, TimeCorrection timeCorrection = null)
-            : base(secretKey)
+            : base(secretKey, mode)
         {
             VerifyParameters(step, totpSize);
 
             this.step = step;
-            this.hashMode = mode;
             this.totpSize = totpSize;
 
             // we never null check the corrected time object.  Since it's readonly, we'll ensure that it isn't null here and provide neatral functionality in this case.
@@ -103,7 +100,7 @@ namespace OtpSharp
         private string ComputeTotpFromSpecificTime(DateTime timestamp)
         {
             var window = CalculateTimeStepFromTimestamp(timestamp);
-            return this.Compute(window);
+            return this.Compute(window, this.hashMode);
         }
 
         /// <summary>
@@ -189,11 +186,12 @@ namespace OtpSharp
         /// Takes a time step and computes a TOTP code
         /// </summary>
         /// <param name="counter">time step</param>
+        /// <param name="mode">The hash mode to use</param>
         /// <returns>TOTP calculated code</returns>
-        protected override string Compute(long counter)
+        protected override string Compute(long counter, OtpHashMode mode)
         {
             var data = KeyUtilities.GetBigEndianBytes(counter);
-            var otp = this.CalculateOtp(data, this.hashMode);
+            var otp = this.CalculateOtp(data, mode);
             return Digits(otp, this.totpSize);
         }
     }
