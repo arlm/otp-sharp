@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Security.Cryptography;
+
 #if NO_WEB
 #else
-using System.Web;
+
 #endif
 
 namespace OtpSharp
@@ -61,7 +61,8 @@ namespace OtpSharp
         {
             byte[] hmacComputedHash = this.secretKey.ComputeHmac(mode, data);
 
-            // The RFC has a hard coded index 19 in this value.  Last is the same thing but also accomodates SHA256 and SHA512
+            // The RFC has a hard coded index 19 in this value.
+            // This is the same thing but also accomodates SHA256 and SHA512
             // hmacComputedHash[19] => hmacComputedHash[hmacComputedHash.Length - 1]
 
             int offset = hmacComputedHash[hmacComputedHash.Length - 1] & 0x0F;
