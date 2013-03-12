@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 //
 // The CI server will provide the Build Number and Revision
 [assembly: AssemblyVersion("1.1.*")]
-[assembly: AssemblyFileVersion("1.1.*")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 // allow the test assembly to unit test internals
 [assembly: InternalsVisibleTo("OtpSharp.Tests")]

@@ -58,6 +58,7 @@
     <Compile Include="ProtectedKeyTests.cs" />
     <Compile Include="TimeCorrectionTests.cs" />
     <Compile Include="TotpVerification.cs" />
+    <Compile Include="UrlTests.cs" />
     <Compile Include="VerificationWindowTests.cs" />
   </ItemGroup>
   <ItemGroup>
