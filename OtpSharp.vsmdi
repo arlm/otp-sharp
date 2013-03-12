@@ -110,6 +110,13 @@
       <TestLink id="0f8d2e3e-9767-d208-83aa-650f894bc3df" name="TimeCorrection_BasicWithSpecificReference" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     </TestLinks>
   </TestList>
+  <TestList name="OtpKeyInteraction" id="7adc8f73-1977-4664-8f93-9126607ceb55" parentListId="925e9ca5-3a1b-41be-8ef0-f1050bf4322e">
+    <TestLinks>
+      <TestLink id="52456e76-b741-54e5-ef66-bb844164937c" name="Totp_Sha512_Called" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="cfca07b4-0149-1117-2250-71e7e0bdfdf3" name="Totp_Sha1_Called" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="cdaada7a-0721-a67f-3dd7-32a0e75723d2" name="Totp_Sha256_Called" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
   <TestList name="Calculation" id="7fc79c44-44b4-4d6b-8852-970bb9b0f46f" parentListId="5b487326-b7c1-4084-8b30-297b5878346f">
     <TestLinks>
       <TestLink id="c1a5509e-66af-2a33-c568-3c442bf03de2" name="HotpPaddingTest" storage="otpsharp.tests\bin\debug\otpsharp.tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
