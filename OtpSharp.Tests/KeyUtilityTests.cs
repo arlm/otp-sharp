@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAssertions;
 
 namespace OtpSharp.Tests
 {
@@ -31,10 +32,10 @@ namespace OtpSharp.Tests
             Assert.AreEqual(0x01, data.Last());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod]
         public void Destroy_NullArgument()
         {
-            KeyUtilities.Destroy(null);
+            new Action(() => KeyUtilities.Destroy(null)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: sensetiveData");
         }
 
         [TestMethod]

@@ -51,7 +51,7 @@ namespace OtpSharp
         public Otp(IKeyProvider secretKey, OtpHashMode mode)
         {
             if (!(secretKey != null))
-                throw new ArgumentNullException("A secret key must be provided");
+                throw new ArgumentNullException("secretKey");
 
             this.secretKey = secretKey;
             this.hashMode = mode;

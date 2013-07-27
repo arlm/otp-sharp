@@ -68,11 +68,11 @@ namespace OtpSharp
         private static void VerifyParameters(int step, int totpSize)
         {
             if (!(step > 0))
-                throw new ArgumentOutOfRangeException("The step must be a non zero positive integer");
+                throw new ArgumentOutOfRangeException("step");
             if (!(totpSize > 0))
-                throw new ArgumentOutOfRangeException("The totp size must be a non zero positive integer");
+                throw new ArgumentOutOfRangeException("totpSize");
             if (!(totpSize <= 10))
-                throw new ArgumentOutOfRangeException("The totp size must be no greater than 10");
+                throw new ArgumentOutOfRangeException("totpSize");
         }
 
         /// <summary>

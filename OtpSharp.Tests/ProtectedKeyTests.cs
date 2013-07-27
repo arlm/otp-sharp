@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Security.Cryptography;
 
 namespace OtpSharp.Tests
 {
@@ -11,17 +9,19 @@ namespace OtpSharp.Tests
     public class ProtectedKeyTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_Empty()
         {
-            var key = new InMemoryKey(new byte[] { });
+            new Action(() => new InMemoryKey(new byte[] { }))
+                .ShouldThrow<ArgumentException>()
+                .WithMessage("The key must not be empty");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProtectedKey_Null()
         {
-            InMemoryKey key = new InMemoryKey(null);
+            new Action(() => new InMemoryKey(null))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: key");
         }
 
         [TestMethod]
@@ -101,24 +101,27 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_ProtectKeyEmpty()
         {
-            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess);
+            new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess))
+                .ShouldThrow<ArgumentException>().
+                WithMessage("The key must not be empty");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ProtectedKey_ProtectKeyZeroLength()
         {
-            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess);
+            new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess))
+                .ShouldThrow<ArgumentException>()
+                .WithMessage("The key must not be empty");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProtectedKey_ProtectKeyNull()
         {
-            var pk = InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(null, 16, MemoryProtectionScope.SameProcess);
+            new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(null, 16, MemoryProtectionScope.SameProcess))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: preProtectedKey");
         }
 
         [TestMethod]

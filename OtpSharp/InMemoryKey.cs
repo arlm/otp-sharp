@@ -106,7 +106,7 @@ namespace OtpSharp
         public InMemoryKey(byte[] key)
         {
             if (!(key != null))
-                throw new ArgumentNullException("A secret key must be provided");
+                throw new ArgumentNullException("key");
             if (!(key.Length > 0))
                 throw new ArgumentException("The key must not be empty");
 
@@ -127,7 +127,7 @@ namespace OtpSharp
         private InMemoryKey(byte[] preProtectedKey, int keyLength, MemoryProtectionScope scope)
         {
             if (!(preProtectedKey != null))
-                throw new ArgumentNullException("A secret key must be provided");
+                throw new ArgumentNullException("preProtectedKey");
             if (!(preProtectedKey.Length > 0))
                 throw new ArgumentException("The key must not be empty");
             if (!(keyLength > 0))

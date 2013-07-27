@@ -4,12 +4,12 @@
     // NO_WEB is useful in cases where only a client profile is available
 #else
 
+    using Base32;
     using System;
     using System.Collections.Specialized;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Web;
-	using Base32;
 
     /// <summary>
     /// Class that generates and reads the de-facto url format used by google
@@ -132,7 +132,7 @@
             var url = new Uri(rawUrl);
 
             if (url.Scheme != "otpauth")
-                throw new ArgumentException("invalid scheme {0}. Must be otpauth://", url.Scheme);
+                throw new ArgumentException(string.Format("invalid scheme {0}. Must be otpauth://", url.Scheme));
 
             var otpTypeString = url.Authority;
             OtpType type;
@@ -146,7 +146,7 @@
                 case OtpType.Totp:
                     return TotpFromUrl(url);
                 default:
-                    throw new ArgumentException("rawUrl contains an invalid operation {0}. Must be hotp or totp", otpTypeString);
+                    throw new ArgumentException(string.Format("rawUrl contains an invalid operation {0}. Must be hotp or totp", otpTypeString));
             }
         }
 

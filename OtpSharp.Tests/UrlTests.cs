@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Base32;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Specialized;
-using Base32;
 
 namespace OtpSharp.Tests
 {
@@ -46,10 +47,11 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TotpUrl_DigitsTen()
         {
-            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", totpSize: 10);
+            new Action(() => KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, "user", totpSize: 10))
+                .ShouldThrow<ArgumentException>()
+                .WithMessage("size must be 6 or 8");
         }
 
         [TestMethod]
@@ -67,31 +69,35 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_EmptyUser()
         {
-            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, string.Empty);
+            new Action(() => KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, string.Empty))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: user");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_NullUser()
         {
-            var url = KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, null);
+            new Action(() => KeyUrl.GetTotpUrl(OtpCalculationTests.RfcTestKey, null))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: user");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_NullKey()
         {
-            var url = KeyUrl.GetTotpUrl(null, "user");
+            new Action(() => KeyUrl.GetTotpUrl(null, "user"))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: key");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TotpUrl_EmptyKey()
         {
-            var url = KeyUrl.GetTotpUrl(new byte[] { }, "user");
+            new Action(() => KeyUrl.GetTotpUrl(new byte[] { }, "user"))
+                .ShouldThrow<ArgumentNullException>()
+                .WithMessage("Value cannot be null.\r\nParameter name: key");
         }
 
         [TestMethod]
@@ -116,10 +122,11 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void HotpUrl_DigitsTen()
         {
-            var url = KeyUrl.GetHotpUrl(OtpCalculationTests.RfcTestKey, "user", 1, 10);
+            new Action(() => KeyUrl.GetHotpUrl(OtpCalculationTests.RfcTestKey, "user", 1, 10))
+                .ShouldThrow<ArgumentException>()
+                .WithMessage("size must be 6 or 8");
         }
 
         #endregion to url
@@ -154,25 +161,25 @@ namespace OtpSharp.Tests
             Assert.AreEqual(OtpHashMode.Sha1, totp.GetHashMode(), "Hash mode doesn't match");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void FromTotpUrl_StepInvalid()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&period=a", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid digits , must be a number");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void FromTotpUrl_NegativeStep()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&period=-1", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid Period -1, must be at least 1");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void FromTotpUrl_ZeroStep()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&period=0", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid Period 0, must be at least 1");
         }
 
         [TestMethod]
@@ -189,11 +196,11 @@ namespace OtpSharp.Tests
             Assert.AreEqual(OtpHashMode.Sha1, totp.GetHashMode(), "Hash mode doesn't match");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void FromTotpUrl_ExplicitHashModeInvalid()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&algorithm=Garbage", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid Algorithm Garbage");
         }
 
         [TestMethod]
@@ -253,18 +260,17 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_DigitsTen()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&digits=10", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid Digits 10, must be 6 or 8");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void FromTotpUrl_DigitsInvalid()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&digits=a", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid digits a, must be a number");
         }
 
         [TestMethod]
@@ -310,128 +316,114 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FromTotpUrl_EmptyUrl()
         {
-            var otp = KeyUrl.FromUrl(string.Empty);
+            new Action(() => KeyUrl.FromUrl(string.Empty)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: rawUrl");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FromTotpUrl_NullUrl()
         {
-            var otp = KeyUrl.FromUrl(null);
+            new Action(() => KeyUrl.FromUrl(null)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: rawUrl");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_InvalidQueryString()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&algorithm=Sha512&period=15&digits=8&blah=b", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid parameter in query string");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_MalFormattedUrl_NoUser()
         {
             var url = string.Format("otpauth://totp?secret={0}&algorithm=Sha512&period=15&digits=8", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("rawUrl is invalid");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_MalFormattedUrl_NoUserWithSlash()
         {
             var url = string.Format("otpauth://totp/?secret={0}&algorithm=Sha512&period=15&digits=8", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("rawUrl is invalid");
         }
 
         /// <summary>
         /// not yet implemented
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_MalFormattedUrl_ExtraArgument()
         {
             var url = string.Format("otpauth://totp/user/extra?secret={0}&algorithm=Sha512&period=15&digits=8", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("rawUrl is invalid");
         }
         /// <summary>
         /// not yet implemented
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_MalFormattedUrl_ExtraArgumentWithSlash()
         {
             var url = string.Format("otpauth://totp/user/extra/?secret={0}&algorithm=Sha512&period=15&digits=8", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("rawUrl is invalid");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_InvalidScheme()
         {
             var url = string.Format("otp://totp/user?secret={0}&algorithm=Sha512&period=15&digits=8", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("invalid scheme otp. Must be otpauth://");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_NoSecret()
         {
             var url = "otpauth://totp/user?period=30";
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("must contain secret");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_NoQueryString()
         {
             var url = "otpauth://totp/user";
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Must have a query string");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromTotpUrl_WithCounter()
         {
             var url = string.Format("otpauth://totp/user?secret={0}&counter=1", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid parameter in query string");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromHotpUrl_WithPeriod()
         {
             var url = string.Format("otpauth://Hotp/user?secret={0}&period=15", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("Invalid parameter in query string");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromUrl_InvalidType()
         {
             var url = string.Format("otpauth://sotp/user?secret={0}", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("rawUrl contains an invalid operation sotp. Must be hotp or totp");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FromUrl_InvalidProtocol()
         {
             var url = string.Format("otp://totp/user?secret={0}", Base32Encoder.Encode(OtpCalculationTests.RfcTestKey));
-            var otp = KeyUrl.FromUrl(url);
+            new Action(() => KeyUrl.FromUrl(url)).ShouldThrow<ArgumentException>().WithMessage("invalid scheme otp. Must be otpauth://");
         }
 
         #endregion
 
         #region validate query fields
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod]
         public void ValidateQueryStringFields_NullCollection()
         {
-            KeyUrl.ValidateQueryStringFields(null, "true");
+            new Action(() => KeyUrl.ValidateQueryStringFields(null, "true")).ShouldThrow<ArgumentException>().WithMessage("Value cannot be null.\r\nParameter name: query");
         }
 
         [TestMethod]

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace OtpSharp.Tests
 {
@@ -17,47 +14,41 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContractTestKeySize_Null()
         {
             byte[] key = null;
-            var t = new Totp(key);
+            new Action(() => new Totp(key)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: secretKey"); ;
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ContractTestKeySize_ProtectedKeyNull()
+        public void ContractTestKeySize_InMemoryKeyNull()
         {
             InMemoryKey key = null;
-            var t = new Totp(key);
+            new Action(() => new Totp(key)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: secretKey"); ;
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ContractTestKeySize_Empty()
         {
-            var t = new Totp(new byte[] { });
+            new Action(() => new Totp(new byte[] { })).ShouldThrow<ArgumentException>().WithMessage("secretKey empty");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ContractTestKeySize_ProtectedKeyEmpty()
         {
-            var t = new Totp(new InMemoryKey(new byte[] { }));
+            new Action(() => new Totp(new InMemoryKey(new byte[] { }))).ShouldThrow<ArgumentException>().WithMessage("The key must not be empty");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Zero()
         {
-            var t = new Totp(OtpCalculationTests.RfcTestKey, step: 0);
+            new Action(() => new Totp(OtpCalculationTests.RfcTestKey, step: 0)).ShouldThrow<ArgumentOutOfRangeException>().WithMessage("Specified argument was out of the range of valid values.\r\nParameter name: step");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void StepSize_Negative()
         {
-            var t = new Totp(OtpCalculationTests.RfcTestKey, step: -1);
+            new Action(() => new Totp(OtpCalculationTests.RfcTestKey, step: -1)).ShouldThrow<ArgumentOutOfRangeException>().WithMessage("Specified argument was out of the range of valid values.\r\nParameter name: step");
         }
 
         [TestMethod]
@@ -67,24 +58,21 @@ namespace OtpSharp.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Zero()
         {
-            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 0);
+            new Action(() => new Totp(OtpCalculationTests.RfcTestKey, totpSize: 0)).ShouldThrow<ArgumentOutOfRangeException>().WithMessage("Specified argument was out of the range of valid values.\r\nParameter name: totpSize"); ;
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Negative()
         {
-            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: -1);
+            new Action(() => new Totp(OtpCalculationTests.RfcTestKey, totpSize: -1)).ShouldThrow<ArgumentOutOfRangeException>().WithMessage("Specified argument was out of the range of valid values.\r\nParameter name: totpSize"); ;
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Digits_Eleven()
         {
-            var t = new Totp(OtpCalculationTests.RfcTestKey, totpSize: 11);
+            new Action(() => new Totp(OtpCalculationTests.RfcTestKey, totpSize: 11)).ShouldThrow<ArgumentOutOfRangeException>().WithMessage("Specified argument was out of the range of valid values.\r\nParameter name: totpSize"); ;
         }
 
         [TestMethod]
