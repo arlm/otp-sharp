@@ -9,7 +9,8 @@ namespace OtpSharp
     /// <remarks>
     /// This will attempt to use the Windows data protection api to encrypt the key in memory.
     /// However, this type favors working over memory protection. This is an attempt to minimize
-    /// exposure in memory, nothing more. This protection is flawed in many ways.
+    /// exposure in memory, nothing more. This protection is flawed in many ways and is limited
+    /// to Windows.
     /// 
     /// In order to use the key to compute an hmac it must be temporarily decrypted, used,
     /// then re-encrypted. This does expose the key in memory for a time. If a memory dump occurs in this time

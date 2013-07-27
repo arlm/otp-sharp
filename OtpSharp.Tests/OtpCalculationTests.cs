@@ -37,6 +37,7 @@ namespace OtpSharp.Tests
             "|DataDirectory|\\Rfc4226AppendixD.xml",
             "Row",
             DataAccessMethod.Sequential)]
+        [DeploymentItem("Rfc4226AppendixD.xml")]
         public void OtpAppendixDTests()
         {
             // test values from RFC - Appendix D
@@ -54,6 +55,7 @@ namespace OtpSharp.Tests
             "|DataDirectory|\\Rfc4226AppendixD.xml",
             "Row",
             DataAccessMethod.Sequential)]
+        [DeploymentItem("Rfc4226AppendixD.xml")]
         public void HotpAppendixDTests()
         {
             // test values from RFC - Appendix D
@@ -71,6 +73,7 @@ namespace OtpSharp.Tests
             "|DataDirectory|\\Rfc4226AppendixD.xml",
             "Row",
             DataAccessMethod.Sequential)]
+        [DeploymentItem("Rfc4226AppendixD.xml")]
         public void HotpAppendixDTests_ProtectedKey()
         {
             // test values from RFC - Appendix D
@@ -88,6 +91,7 @@ namespace OtpSharp.Tests
             "|DataDirectory|\\Rfc6238AppendixB.xml",
             "Row",
             DataAccessMethod.Sequential)]
+        [DeploymentItem("Rfc6238AppendixB.xml")]
         public void TotpAppendixBTests()
         {
             // test values from RFC - Appendix D
@@ -109,6 +113,7 @@ namespace OtpSharp.Tests
             "|DataDirectory|\\Rfc6238AppendixB.xml",
             "Row",
             DataAccessMethod.Sequential)]
+        [DeploymentItem("Rfc6238AppendixB.xml")]
         public void TotpAppendixBTests_ProtectedKey()
         {
             // test values from RFC - Appendix D

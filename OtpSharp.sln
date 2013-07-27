@@ -5,13 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtpSharp", "OtpSharp\OtpSha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtpSharp.Tests", "OtpSharp.Tests\OtpSharp.Tests.csproj", "{47CEC7AF-4820-4683-9FC5-866333BD39E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C31270FF-0165-43E2-8D73-AE1B18BA58CF}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		OtpSharp.vsmdi = OtpSharp.vsmdi
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleAuthenticatorTotpTest", "GoogleAuthenticatorTotpTest\GoogleAuthenticatorTotpTest.csproj", "{03032D47-249C-4D18-8196-FA6C02E37CC1}"
 EndProject
 Global

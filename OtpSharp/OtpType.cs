@@ -11,6 +11,10 @@ namespace OtpSharp
     public enum OtpType
     {
         /// <summary>
+        /// Unknown
+        /// </summary>
+        Unknown,
+        /// <summary>
         /// HOTP
         /// </summary>
         Hotp,
