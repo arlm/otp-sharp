@@ -20,7 +20,9 @@ The implementation includes the code calculation as well as simple verification.
 For documentation please visit the project website.</description>
         <summary>An implementation of HOTP or HMAC One Time Paswords (RFC 4226) and TOTP or Timed One Time Passwords (RFC 6238) in C#.  Additionally contains a base 32 encoder.</summary>
     <copyright>Copyright 2012-2013 Devin Martin</copyright>
-<releaseNotes>1.1 Change the Key api to no longer require returning the plaintext key. (will break any custom key implementations). Move the get URL from the Otp to a static Url type.
+<releaseNotes>1.2 extract base32 functionality into seperate nuget package (Base32). Implement FromUrl functionality
+
+1.1 Change the Key api to no longer require returning the plaintext key. (will break any custom key implementations). Move the get URL from the Otp to a static Url type.
 
 1.0.6 Change the computed values from ints to padded strings. (Breaking change but is a more appropriate API)
 
@@ -32,5 +34,8 @@ The protected key no longer implicitly causes side effects (destroying the plain
 
 Added a time correction class with experimental NTP abilities.</releaseNotes>
     <tags>authentication OATH totp otp hotp base32 multi-factor two-factor factor security login OATH-HOTP OATH-TOTP</tags>
+	<dependencies>
+		<dependency id="Base32" version="1.0.0.12" />
+	</dependencies>
   </metadata>
 </package>
