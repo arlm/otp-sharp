@@ -1,7 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+﻿using NUnit.Framework;
+using OtpSharp.Tests.Data;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OtpSharp.Tests
 {
@@ -12,7 +13,7 @@ namespace OtpSharp.Tests
     /// http://tools.ietf.org/html/rfc4226#appendix-D
     /// http://tools.ietf.org/html/rfc6238#appendix-B
     /// </remarks>
-    [TestClass]
+    [TestFixture]
     public class OtpCalculationTests
     {
         /// <summary>
@@ -32,108 +33,67 @@ namespace OtpSharp.Tests
         /// </summary>
         public TestContext TestContext { get; set; }
 
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc4226AppendixD.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        [DeploymentItem("Rfc4226AppendixD.xml")]
-        public void OtpAppendixDTests()
+        [Test]
+        [TestCaseSource(typeof(Rfc4226AppendixDDataSource))]
+        public void OtpAppendixDTests(Rfc4226AppendixDData data)
         {
-            // test values from RFC - Appendix D
-            long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
-            long expectedResult = Convert.ToInt64(this.TestContext.DataRow["decimal"]);
+            Assert.IsNotNull(data, "data was null");
 
             Hotp hotpCalculator = new Hotp(RfcTestKey);
-            var otp = hotpCalculator.ComputeHotpDecimal(counter, OtpHashMode.Sha1);
+            var otp = hotpCalculator.ComputeHotpDecimal(data.Counter, OtpHashMode.Sha1);
 
-            Assert.AreEqual(expectedResult, otp);
+            Assert.AreEqual(data.Decimal, otp);
         }
 
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc4226AppendixD.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        [DeploymentItem("Rfc4226AppendixD.xml")]
-        public void HotpAppendixDTests()
+        [Test]
+        [TestCaseSource(typeof(Rfc4226AppendixDDataSource))]
+        public void HotpAppendixDTests(Rfc4226AppendixDData data)
         {
-            // test values from RFC - Appendix D
-            long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
-            string expectedResult = (string)this.TestContext.DataRow["hotp"];
-
+            Assert.IsNotNull(data, "data was null");
             Hotp hotpCalculator = new Hotp(RfcTestKey);
-            var hotp = hotpCalculator.ComputeHotp(counter);
-
-            Assert.AreEqual(expectedResult, hotp);
+            var hotp = hotpCalculator.ComputeHotp(data.Counter);
+            Assert.AreEqual(data.Hotp, hotp);
         }
 
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc4226AppendixD.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        [DeploymentItem("Rfc4226AppendixD.xml")]
-        public void HotpAppendixDTests_ProtectedKey()
+        [Test]
+        [TestCaseSource(typeof(Rfc4226AppendixDDataSource))]
+        public void HotpAppendixDTests_ProtectedKey(Rfc4226AppendixDData data)
         {
-            // test values from RFC - Appendix D
-            long counter = Convert.ToInt64(this.TestContext.DataRow["counter"]);
-            string expectedResult = (string)this.TestContext.DataRow["hotp"];
+            Assert.IsNotNull(data, "data was null");
 
             Hotp hotpCalculator = new Hotp(new InMemoryKey(RfcTestKey));
-            var hotp = hotpCalculator.ComputeHotp(counter);
+            var hotp = hotpCalculator.ComputeHotp(data.Counter);
 
-            Assert.AreEqual(expectedResult, hotp);
+            Assert.AreEqual(data.Hotp, hotp);
         }
 
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc6238AppendixB.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        [DeploymentItem("Rfc6238AppendixB.xml")]
-        public void TotpAppendixBTests()
+        [Test]
+        [TestCaseSource(typeof(Rfc6238AppendixBDataSource))]
+        public void TotpAppendixBTests(Rfc6238AppendixBData data)
         {
-            // test values from RFC - Appendix D
-            var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
-            string expectedResult = (string)this.TestContext.DataRow["totp"];
+            Assert.IsNotNull(data, "data was null");
+            var totpCalculator = new Totp(data.RfcTestKey.ToArray(), mode: data.Mode, totpSize: 8);
+            var totp = totpCalculator.ComputeTotp(data.Time);
 
-            OtpHashMode mode;
-            byte[] key;
-            GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
-
-            var totpCalculator = new Totp(key, mode: mode, totpSize: 8);
-            var hotp = totpCalculator.ComputeTotp(time);
-
-            Assert.AreEqual(expectedResult, hotp);
+            Assert.AreEqual(data.Totp, totp);
         }
 
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-            "|DataDirectory|\\Rfc6238AppendixB.xml",
-            "Row",
-            DataAccessMethod.Sequential)]
-        [DeploymentItem("Rfc6238AppendixB.xml")]
-        public void TotpAppendixBTests_ProtectedKey()
+        [Test]
+        [TestCaseSource(typeof(Rfc6238AppendixBDataSource))]
+        public void TotpAppendixBTests_ProtectedKey(Rfc6238AppendixBData data)
         {
-            // test values from RFC - Appendix D
-            var time = DateTime.Parse((string)this.TestContext.DataRow["time"]);
-            string expectedResult = (string)this.TestContext.DataRow["totp"];
+            Assert.IsNotNull(data, "data was null");
 
-            OtpHashMode mode;
-            byte[] key;
-            GetMode((string)this.TestContext.DataRow["mode"], out mode, out key);
+            var totpCalculator = new Totp(new InMemoryKey(data.RfcTestKey.ToArray()), mode: data.Mode, totpSize: 8);
+            var totp = totpCalculator.ComputeTotp(data.Time);
 
-            var totpCalculator = new Totp(new InMemoryKey(key), mode: mode, totpSize: 8);
-            var hotp = totpCalculator.ComputeTotp(time);
-
-            Assert.AreEqual(expectedResult, hotp);
+            Assert.AreEqual(data.Totp, totp);
         }
 
         /// <summary>
         /// Ensures that the padding is correct
         /// </summary>
-        [TestMethod]
+        [Test]
         public void HotpPaddingTest()
         {
             var hotpCalculator = new Hotp(RfcTestKey);
@@ -144,10 +104,10 @@ namespace OtpSharp.Tests
         /// <summary>
         /// Ensures that the padding is correct
         /// </summary>
-        [TestMethod]
+        [Test]
         public void Totp8DigitPaddingTest()
         {
-            var totpCalculator = new Totp(RfcTestKey, totpSize:8);
+            var totpCalculator = new Totp(RfcTestKey, totpSize: 8);
             var date = new DateTime(1970, 1, 19, 13, 23, 00);
             var totp = totpCalculator.ComputeTotp(date);
             Assert.AreEqual("00003322", totp);
@@ -156,52 +116,13 @@ namespace OtpSharp.Tests
         /// <summary>
         /// Ensures that the padding is correct
         /// </summary>
-        [TestMethod]
+        [Test]
         public void Totp6DigitPaddingTest()
         {
             var totpCalculator = new Totp(RfcTestKey, totpSize: 6);
             var date = new DateTime(1970, 1, 19, 13, 23, 00);
             var totp = totpCalculator.ComputeTotp(date);
             Assert.AreEqual("003322", totp);
-        }
-
-        private void GetMode(string mode, out OtpHashMode outputMode, out byte[] key)
-        {
-            switch (mode)
-            {
-                case "SHA256":
-                    outputMode = OtpHashMode.Sha256;
-                    key = JoinKeys(32).ToArray();
-                    break;
-                case "SHA512":
-                    outputMode = OtpHashMode.Sha512;
-                    key = JoinKeys(64).ToArray();
-                    break;
-                case "SHA1":
-                    outputMode = OtpHashMode.Sha1;
-                    key = JoinKeys(20).ToArray();
-                    break;
-                default:
-                    throw new Exception("Inavlid mode");
-            }
-        }
-
-        /// <summary>
-        /// Helper method to repeat the test key up to the number of bytes specified
-        /// </summary>
-        private IEnumerable<byte> JoinKeys(int bytes)
-        {
-            int i = 0;
-            do
-            {
-                foreach (var b in RfcTestKey)
-                {
-                    yield return b;
-                    i++;
-                    if (i >= bytes)
-                        break;
-                }
-            } while (i < bytes);
         }
     }
 }

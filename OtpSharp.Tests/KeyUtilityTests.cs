@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
+using NUnit.Framework;
 
 namespace OtpSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class KeyUtilityTests
     {
-        [TestMethod]
+        [Test]
         public void BigEndianInt()
         {
             var data = KeyUtilities.GetBigEndianBytes(1);
@@ -21,7 +19,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(0x01, data.Last());
         }
 
-        [TestMethod]
+        [Test]
         public void BigEndianLong()
         {
             var data = KeyUtilities.GetBigEndianBytes(1L);
@@ -32,19 +30,19 @@ namespace OtpSharp.Tests
             Assert.AreEqual(0x01, data.Last());
         }
 
-        [TestMethod]
+        [Test]
         public void Destroy_NullArgument()
         {
             new Action(() => KeyUtilities.Destroy(null)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: sensetiveData");
         }
 
-        [TestMethod]
+        [Test]
         public void Destroy_Empty()
         {
             KeyUtilities.Destroy(new byte[] { }); // just make sure this doesn't blow up
         }
 
-        [TestMethod]
+        [Test]
         public void Destroy_Success()
         {
             var testKey = OtpCalculationTests.RfcTestKey;

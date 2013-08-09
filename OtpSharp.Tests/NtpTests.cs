@@ -1,15 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace OtpSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class NtpTests
     {
-        [TestMethod]
+        [Test]
         public void NistParse_Success()
         {
             var response = @"
@@ -20,7 +17,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(new DateTime(2013, 2, 5, 18, 41, 11), time, "time doesn't match");
         }
 
-        [TestMethod]
+        [Test]
         public void NistParse_NoUtc()
         {
             DateTime time;
@@ -28,7 +25,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(DateTime.MinValue, time);
         }
 
-        [TestMethod]
+        [Test]
         public void NistParse_NoRegexMatch()
         {
             DateTime time;

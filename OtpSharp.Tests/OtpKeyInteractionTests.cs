@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
+using NUnit.Framework;
+using System;
 
 namespace OtpSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class OtpKeyInteractionTests
     {
         private Mock<IKeyProvider> keyMock
@@ -28,7 +28,7 @@ namespace OtpSharp.Tests
         private const long hotpCounter = 1;
         private readonly byte[] hotpData = KeyUtilities.GetBigEndianBytes(1L);
 
-        [TestMethod]
+        [Test]
         public void Totp_Sha1_Default_Called()
         {
             var mock = this.keyMock;
@@ -40,7 +40,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha1, totpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Totp_Sha1_Called()
         {
             var mock = this.keyMock;
@@ -52,7 +52,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha1, totpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Totp_Sha256_Called()
         {
             var mock = this.keyMock;
@@ -64,7 +64,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha256, totpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Totp_Sha512_Called()
         {
             var mock = this.keyMock;
@@ -76,7 +76,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha512, totpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Hotp_Sha1_Default_Called()
         {
             var mock = this.keyMock;
@@ -88,7 +88,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha1, hotpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Hotp_Sha1_Called()
         {
             var mock = this.keyMock;
@@ -100,7 +100,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha1, hotpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Hotp_Sha256_Called()
         {
             var mock = this.keyMock;
@@ -112,7 +112,7 @@ namespace OtpSharp.Tests
             mock.Verify(k => k.ComputeHmac(OtpHashMode.Sha256, hotpData));
         }
 
-        [TestMethod]
+        [Test]
         public void Hotp_Sha512_Called()
         {
             var mock = this.keyMock;

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using System;
 using System.Threading;
 
 namespace OtpSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TotpVerification
     {
         DateTime testTime = new DateTime(2009, 2, 13, 23, 31, 30);
 
-        [TestMethod]
+        [Test]
         public void ExactMatch_SpecificVerificationWindow()
         {
             var verificationWindow = new VerificationWindow();
@@ -20,7 +17,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow);
         }
 
-        [TestMethod]
+        [Test]
         public void ExactMatch_SpecificVerificationWindowWithPriors()
         {
             var verificationWindow = new VerificationWindow(previous: 1);
@@ -28,7 +25,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow);
         }
 
-        [TestMethod]
+        [Test]
         public void ExactMatch_NullVerificationWindow()
         {
             VerificationWindow verificationWindow = null;
@@ -36,7 +33,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow);
         }
 
-        [TestMethod]
+        [Test]
         public void PreviousMatch_SpecificVerificationWindow()
         {
             var verificationWindow = new VerificationWindow(previous: 1);
@@ -44,7 +41,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow, -1);
         }
 
-        [TestMethod]
+        [Test]
         public void PreviousNonMatch_SpecificVerificationWindow()
         {
             var verificationWindow = new VerificationWindow();
@@ -52,7 +49,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow, -1, false);
         }
 
-        [TestMethod]
+        [Test]
         public void FutureMatch_SpecificVerificationWindow()
         {
             var verificationWindow = new VerificationWindow(future: 1);
@@ -60,7 +57,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow, 1);
         }
 
-        [TestMethod]
+        [Test]
         public void FutureNonMatch_SpecificVerificationWindow()
         {
             var verificationWindow = new VerificationWindow();
@@ -68,7 +65,7 @@ namespace OtpSharp.Tests
             AssertWindow(verificationWindow, 1, false);
         }
 
-        [TestMethod]
+        [Test]
         public void ExactMatch_SpecificVerificationWindowUtcTime()
         {
             var totp = new Totp(OtpCalculationTests.RfcTestKey);
@@ -98,7 +95,7 @@ namespace OtpSharp.Tests
                 Assert.IsFalse(success);
         }
 
-        [TestMethod]
+        [Test]
         public void Totp_EnsureKeyIntegrity()
         {
             var key = OtpCalculationTests.RfcTestKey;
@@ -106,7 +103,7 @@ namespace OtpSharp.Tests
             CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
-        [TestMethod]
+        [Test]
         public void TotpUtcOverload()
         {
             var totp = new Totp(OtpCalculationTests.RfcTestKey);
@@ -122,7 +119,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(code1, code2);
         }
 
-        [TestMethod]
+        [Test]
         public void TotpRemainingTimeUtcOverload()
         {
             var totp = new Totp(OtpCalculationTests.RfcTestKey);

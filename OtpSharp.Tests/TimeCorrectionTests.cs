@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using System;
 
 namespace OtpSharp.Tests
 {
@@ -11,10 +10,10 @@ namespace OtpSharp.Tests
     /// If there is a failure re-run the test and report a bug and we'll consider moving to mocks.  Haven't seen it yet but it is 
     /// possible if the the time the test is run and thread scheduler conspire against the test.
     /// </remarks>
-    [TestClass]
+    [TestFixture]
     public class TimeCorrectionTests
     {
-        [TestMethod]
+        [Test]
         public void TimeCorrection_BasicWithSpecificReference()
         {
             var baseTime = DateTime.UtcNow;
@@ -26,7 +25,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(TimeSpan.FromMilliseconds(-12500), correction.CorrectionFactor);
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_Basic()
         {
             var hypotheticallyCorrectUtcTime = DateTime.UtcNow.AddMilliseconds(12500);
@@ -38,14 +37,14 @@ namespace OtpSharp.Tests
             Assert.IsTrue(Math.Abs(difference.TotalMilliseconds) <= 64, "The corrected value is wrong");
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_UncorrectedInstanceSpecificReference()
         {
             var baseTime = DateTime.UtcNow;
             Assert.AreEqual(baseTime, TimeCorrection.UncorrectedInstance.GetCorrectedTime(baseTime));
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpWithCorrectionRemainingSeconds()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(5));
@@ -67,7 +66,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(5, difference);
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpWithCorrectionGeneration()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
@@ -81,7 +80,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(uncorrectedCode, correctedCode);
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpWithCorrectionVerification()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
@@ -99,7 +98,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(uncorrectedStep, correctedStep);
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpRemainingSecondsSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(15));
@@ -111,7 +110,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(specificRemaining, utcRemaining, "The 2 remaining seconds overloads didn't produce the same results");
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpComputeTotpSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away
@@ -123,7 +122,7 @@ namespace OtpSharp.Tests
             Assert.AreEqual(specificCode, utcCode, "The 2 compute totp overloads didn't produce the same results");
         }
 
-        [TestMethod]
+        [Test]
         public void TimeCorrection_TotpVerifyTotpSpecificDateWithCorrection()
         {
             var correction = new TimeCorrection(DateTime.UtcNow.AddSeconds(100)); // 100 ensures that at a minimum we are 3 steps away

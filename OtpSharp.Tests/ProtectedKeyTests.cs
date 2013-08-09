@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Security.Cryptography;
 
 namespace OtpSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ProtectedKeyTests
     {
-        [TestMethod]
+        [Test]
         public void ProtectedKey_Empty()
         {
             new Action(() => new InMemoryKey(new byte[] { }))
@@ -16,7 +16,7 @@ namespace OtpSharp.Tests
                 .WithMessage("The key must not be empty");
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_Null()
         {
             new Action(() => new InMemoryKey(null))
@@ -24,14 +24,14 @@ namespace OtpSharp.Tests
                 .WithMessage("Value cannot be null.\r\nParameter name: key");
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_Basic()
         {
             var pk = new InMemoryKey(OtpCalculationTests.RfcTestKey);
             CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, pk.GetCopyOfKey());
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_WipeReference()
         {
             var key = OtpCalculationTests.RfcTestKey;
@@ -44,7 +44,7 @@ namespace OtpSharp.Tests
         /// into the constructor with random garbage.  This test is to ensure that behavior
         /// isn't present anymore.
         /// </remarks>
-        [TestMethod]
+        [Test]
         public void ProtectedKey_EnsureOriginalkeyIntegrity()
         {
             var key = OtpCalculationTests.RfcTestKey;
@@ -52,7 +52,7 @@ namespace OtpSharp.Tests
             CollectionAssert.AreEqual(OtpCalculationTests.RfcTestKey, key);
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKey()
         {
             var originalKey = KeyGeneration.GenerateRandomKey(16);
@@ -68,7 +68,7 @@ namespace OtpSharp.Tests
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKey_CrossProcess()
         {
             var originalKey = KeyGeneration.GenerateRandomKey(16);
@@ -84,7 +84,7 @@ namespace OtpSharp.Tests
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKey_SameLogon()
         {
             var originalKey = KeyGeneration.GenerateRandomKey(16);
@@ -100,7 +100,7 @@ namespace OtpSharp.Tests
             CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKeyEmpty()
         {
             new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess))
@@ -108,7 +108,7 @@ namespace OtpSharp.Tests
                 WithMessage("The key must not be empty");
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKeyZeroLength()
         {
             new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(OtpCalculationTests.RfcTestKey, 0, MemoryProtectionScope.SameProcess))
@@ -116,7 +116,7 @@ namespace OtpSharp.Tests
                 .WithMessage("The key must not be empty");
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKeyNull()
         {
             new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(null, 16, MemoryProtectionScope.SameProcess))
@@ -124,7 +124,7 @@ namespace OtpSharp.Tests
                 .WithMessage("Value cannot be null.\r\nParameter name: preProtectedKey");
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_MultipleUse()
         {
             var originalKey = KeyGeneration.GenerateRandomKey(16);
@@ -143,7 +143,7 @@ namespace OtpSharp.Tests
                 CollectionAssert.AreEqual(originalKey, pk.GetCopyOfKey());
         }
 
-        [TestMethod]
+        [Test]
         public void ProtectedKey_ProtectKeyWithSpecificLength()
         {
             var originalKey = KeyGeneration.GenerateRandomKey(20);
