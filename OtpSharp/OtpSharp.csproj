@@ -45,9 +45,9 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Base32, Version=1.0.0.13, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Base32, Version=1.0.0.18, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Base32.1.0.0.13\lib\portable-win+net40+sl40\Base32.dll</HintPath>
+      <HintPath>..\packages\Base32.1.0.0.18\lib\portable-net40+sl40+win+wp80\Base32.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
