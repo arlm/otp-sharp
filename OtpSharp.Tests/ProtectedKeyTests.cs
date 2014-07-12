@@ -104,8 +104,8 @@ namespace OtpSharp.Tests
         public void ProtectedKey_ProtectKeyEmpty()
         {
             new Action(() => InMemoryKey.CreateProtectedKeyFromPreProtectedMemory(new byte[] { }, 16, MemoryProtectionScope.SameProcess))
-                .ShouldThrow<ArgumentException>().
-                WithMessage("The key must not be empty");
+                .ShouldThrow<ArgumentException>()
+                .WithMessage("The key must not be empty");
         }
 
         [Test]
