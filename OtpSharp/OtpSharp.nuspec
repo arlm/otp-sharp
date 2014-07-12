@@ -33,9 +33,12 @@ For documentation please visit the project website.</description>
 The protected key no longer implicitly causes side effects (destroying the plaintext key provided must be done explicitly)
 
 Added a time correction class with experimental NTP abilities.</releaseNotes>
-    <tags>authentication OATH totp otp hotp base32 multi-factor two-factor factor security login OATH-HOTP OATH-TOTP</tags>
+    <tags>authentication OATH totp otp hotp base32 multi-factor two-factor factor security login OATH-HOTP OATH-TOTP linqpad-samples</tags>
 	<dependencies>
 		<dependency id="Base32" version="1.0.0.12" />
 	</dependencies>
   </metadata>
+  <files>
+    <file src="linqpad-samples\**" target="linqpad-samples" />
+  </files>
 </package>
