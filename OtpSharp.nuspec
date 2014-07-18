@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>OtpSharp</id>
-    <version>$version$</version>
-    <title>OTP Sharp</title>
+    <title>OTP Sharp (TOTP, HOTP)</title>
     <authors>Devin Martin</authors>
+	<version>1.0.0.0</version>
     <owners>Devin Martin</owners>
     <licenseUrl>https://s3.amazonaws.com/OtpSharp/LICENSE.txt</licenseUrl>
-    <projectUrl>https://bitbucket.org/devinmartin/otp-sharp/wiki/Home</projectUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectUrl>https://bitbucket.org/devinmartin/otp-sharp/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This is an implementation of HOTP and TOTP which are commonly used for multi factor authentication by using a shared key between the client and the server to generate and verify one time use codes.  This library is capable of generating and verifying both TOTP and HOTP authentication codes.  The calculations in this library are known to be compatible with Google 2-Step Verification and consequently the Google Authenticator smartphone app.  It is also known to be able to generate codes for Amazon Web Services Multi Factor Authentication and Dropbox 2 step authentication.  It should work with any other service or client that is RFC compliant.
 
 This library is released under an MIT license. No warranty is provided as to the correctness of the library and the consumer of the library assumes all risk for the use thereof, as per the MIT license.
@@ -19,8 +19,10 @@ The implementation includes the code calculation as well as simple verification.
 
 For documentation please visit the project website.</description>
         <summary>An implementation of HOTP or HMAC One Time Paswords (RFC 4226) and TOTP or Timed One Time Passwords (RFC 6238) in C#.  Additionally contains a base 32 encoder.</summary>
-    <copyright>Copyright 2012-2013 Devin Martin</copyright>
-<releaseNotes>1.2 extract base32 functionality into seperate nuget package (Base32). Implement FromUrl functionality
+    <copyright>Copyright 2012-2014 Devin Martin</copyright>
+<releaseNotes>1.3 Add a .NET Core (Windows 8x) version
+
+1.2 extract base32 functionality into seperate nuget package (Base32). Implement FromUrl functionality
 
 1.1 Change the Key api to no longer require returning the plaintext key. (will break any custom key implementations). Move the get URL from the Otp to a static Url type.
 
@@ -40,5 +42,12 @@ Added a time correction class with experimental NTP abilities.</releaseNotes>
   </metadata>
   <files>
     <file src="linqpad-samples\**" target="linqpad-samples" />
+	
+	<file src="OtpSharp\bin\$Configuration$\OtpSharp.dll" target="lib\net40\OtpSharp.dll" />
+	<file src="OtpSharp\bin\$Configuration$\OtpSharp.pdb" target="lib\net40\OtpSharp.pdb" />
+	
+	<file src="OtpSharp.WindowsStore\bin\$Configuration$\OtpSharp.WindowsStore.dll" target="lib\netcore45\OtpSharp.dll" />
+	<file src="OtpSharp.WindowsStore\bin\$Configuration$\OtpSharp.WindowsStore.pdb" target="lib\netcore45\OtpSharp.pdb" />
+	
   </files>
 </package>
