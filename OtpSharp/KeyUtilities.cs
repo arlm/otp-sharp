@@ -11,7 +11,7 @@ namespace OtpSharp
     internal class KeyUtilities
     {
         /// <summary>
-        /// Overwrite potentially sensetive data with random junk
+        /// Overwrite potentially sensitive data with random junk
         /// </summary>
         /// <remarks>
         /// Warning!
@@ -19,13 +19,13 @@ namespace OtpSharp
         /// This isn't foolproof by any means.  The garbage collector could have moved the actual
         /// location in memory to another location during a collection cycle and left the old data in place
         /// simply marking it as available.  We can't control this or even detect it.
-        /// This method is simply a good faith effort to limit the exposure of sensetive data in memory as much as possible
+        /// This method is simply a good faith effort to limit the exposure of sensitive data in memory as much as possible
         /// </remarks>
-        internal static void Destroy(byte[] sensetiveData)
+        internal static void Destroy(byte[] sensitiveData)
         {
-            if (sensetiveData == null)
-                throw new ArgumentNullException("sensetiveData");
-            new Random().NextBytes(sensetiveData);
+            if (sensitiveData == null)
+                throw new ArgumentNullException("sensitiveData");
+            new Random().NextBytes(sensitiveData);
         }
 
         /// <summary>

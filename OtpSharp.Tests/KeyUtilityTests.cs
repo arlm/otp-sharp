@@ -33,7 +33,7 @@ namespace OtpSharp.Tests
         [Test]
         public void Destroy_NullArgument()
         {
-            new Action(() => KeyUtilities.Destroy(null)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: sensetiveData");
+            new Action(() => KeyUtilities.Destroy(null)).ShouldThrow<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: sensitiveData");
         }
 
         [Test]
