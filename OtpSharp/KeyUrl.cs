@@ -29,6 +29,7 @@
             public const string PeriodParameter = "period";
             public const string CounterParameter = "counter";
             public const string DigitsParameter = "digits";
+            public const string IssuerParameter = "issuer";
 
             public const string ParameterCreation = "&{0}={1}";
             public const string UrlValidationPatterm = @"^[^:]+://[^/]+/[^/\?]+(/?\?[^/]+)?$";
@@ -39,13 +40,14 @@
         /// </summary>
         /// <param name="key">Plaintext key</param>
         /// <param name="user">The username</param>
+        /// <param name="issuer">The issuer</param>
         /// <param name="step">Timestep</param>
         /// <param name="mode">Hash mode</param>
         /// <param name="totpSize">Digits</param>
         /// <returns>URL</returns>
-        public static string GetTotpUrl(byte[] key, string user, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
+        public static string GetTotpUrl(byte[] key, string user, string issuer, int step = 30, OtpHashMode mode = OtpHashMode.Sha1, int totpSize = 6)
         {
-            var url = GetBaseKeyUrl(key, user, OtpType.Totp, totpSize);
+            var url = GetBaseKeyUrl(key, user, issuer, OtpType.Totp, totpSize);
 
             if (mode != OtpHashMode.Sha1)
                 url += CreateParameter(UrlConstants.AlgorithmParameter, mode);
@@ -61,12 +63,13 @@
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="user">user</param>
+        /// <param name="issuer">Issuer</param>
         /// <param name="counter">Current Counter</param>
         /// <param name="hotpSize">Digits</param>
         /// <returns></returns>
-        public static string GetHotpUrl(byte[] key, string user, long counter, int hotpSize = 6)
+        public static string GetHotpUrl(byte[] key, string user, string issuer, long counter, int hotpSize = 6)
         {
-            var url = GetBaseKeyUrl(key, user, OtpType.Hotp, hotpSize);
+            var url = GetBaseKeyUrl(key, user, issuer, OtpType.Hotp, hotpSize);
             return url + CreateParameter(UrlConstants.CounterParameter, counter);
         }
 
@@ -74,7 +77,7 @@
         /// Gets a URL that conforms to the de-facto standard
         /// created and used by Google
         /// </summary>
-        private static string GetBaseKeyUrl(byte[] key, string user, OtpType otpType, int size)
+        private static string GetBaseKeyUrl(byte[] key, string user, string issuer, OtpType otpType, int size)
         {
             if (string.IsNullOrEmpty(user))
                 throw new ArgumentNullException("user");
@@ -84,7 +87,7 @@
             if (size != 6 && size != 8)
                 throw new ArgumentException("size must be 6 or 8");
 
-			var url = string.Format("otpauth://{0}/{1}?{2}={3}", otpType.ToString().ToLowerInvariant(), System.Web.HttpUtility.UrlEncode(user), UrlConstants.SecretParameter, Base32Encoder.Encode(key));
+            var url = string.Format("otpauth://{0}/{1}?{2}={3}&{4}={5}", otpType.ToString().ToLowerInvariant(), System.Web.HttpUtility.UrlEncode(user), UrlConstants.SecretParameter, Base32Encoder.Encode(key), UrlConstants.IssuerParameter, issuer);
 
             if (size == 8)
                 url += CreateParameter(UrlConstants.DigitsParameter, size);
@@ -111,7 +114,7 @@
         public static Otp FromUrl(string rawUrl)
         {
             string user;
-            return  FromUrl(rawUrl, out user);
+            return FromUrl(rawUrl, out user);
         }
 
         /// <summary>

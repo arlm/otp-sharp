@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using OtpSharp;
 using System.Web;
+using ZXing;
+using ZXing.Common;
 
 namespace GoogleAuthenticatorTotpTest
 {
@@ -23,17 +25,32 @@ namespace GoogleAuthenticatorTotpTest
         {
             InitializeComponent();
             this.UpdateCode();
+            this.ResetTotp();
         }
 
         private void ResetTotp()
         {
             this.totp = new Totp(rfcKey, this.stepSize, totpSize: this.digits);
             var name = this.textBoxKeyLabel.Text;
+            var issuer = this.textBoxIssuer.Text;
             if (string.IsNullOrWhiteSpace(name))
                 name = "OtpSharp@test.com";
 
-            string url = KeyUrl.GetTotpUrl(rfcKey, name, step: this.stepSize, totpSize: this.digits);
-            this.pictureBox1.ImageLocation = string.Format("http://qrcode.kaywa.com/img.php?s=4&d={0}", HttpUtility.UrlEncode(url));
+            if (string.IsNullOrWhiteSpace(issuer))
+                issuer = "OtpSharp-Test";
+
+            string url = KeyUrl.GetTotpUrl(rfcKey, name, issuer, step: this.stepSize, totpSize: this.digits);
+            var barcodeWriter = new BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Height = 200,
+                    Width = 200,
+                    Margin = 0
+                }
+            };
+            this.pictureBox1.Image = barcodeWriter.Write(url);
         }
 
         private void UpdateCode()
@@ -129,6 +146,11 @@ namespace GoogleAuthenticatorTotpTest
         }
 
         private void radioButtonEight_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ResetTotp();
+        }
+
+        private void textBoxIssuer_TextChanged(object sender, EventArgs e)
         {
             this.ResetTotp();
         }

@@ -47,6 +47,8 @@
             this.radioButtonSix = new System.Windows.Forms.RadioButton();
             this.radioButtonEight = new System.Windows.Forms.RadioButton();
             this.labelWarning = new System.Windows.Forms.Label();
+            this.textBoxIssuer = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -55,7 +57,6 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::GoogleAuthenticatorTotpTest.Properties.Resources.QR;
             this.pictureBox1.Location = new System.Drawing.Point(212, 92);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(204, 207);
@@ -148,7 +149,7 @@
             // 
             // textBoxPeriod
             // 
-            this.textBoxPeriod.Location = new System.Drawing.Point(139, 137);
+            this.textBoxPeriod.Location = new System.Drawing.Point(138, 169);
             this.textBoxPeriod.Name = "textBoxPeriod";
             this.textBoxPeriod.Size = new System.Drawing.Size(45, 20);
             this.textBoxPeriod.TabIndex = 3;
@@ -158,7 +159,7 @@
             // labelPeriod
             // 
             this.labelPeriod.AutoSize = true;
-            this.labelPeriod.Location = new System.Drawing.Point(19, 139);
+            this.labelPeriod.Location = new System.Drawing.Point(18, 171);
             this.labelPeriod.Name = "labelPeriod";
             this.labelPeriod.Size = new System.Drawing.Size(114, 13);
             this.labelPeriod.TabIndex = 4;
@@ -185,7 +186,7 @@
             // labelSize
             // 
             this.labelSize.AutoSize = true;
-            this.labelSize.Location = new System.Drawing.Point(19, 165);
+            this.labelSize.Location = new System.Drawing.Point(18, 197);
             this.labelSize.Name = "labelSize";
             this.labelSize.Size = new System.Drawing.Size(84, 13);
             this.labelSize.TabIndex = 8;
@@ -195,7 +196,7 @@
             // 
             this.radioButtonSix.AutoSize = true;
             this.radioButtonSix.Checked = true;
-            this.radioButtonSix.Location = new System.Drawing.Point(22, 182);
+            this.radioButtonSix.Location = new System.Drawing.Point(21, 214);
             this.radioButtonSix.Name = "radioButtonSix";
             this.radioButtonSix.Size = new System.Drawing.Size(60, 17);
             this.radioButtonSix.TabIndex = 9;
@@ -207,7 +208,7 @@
             // radioButtonEight
             // 
             this.radioButtonEight.AutoSize = true;
-            this.radioButtonEight.Location = new System.Drawing.Point(22, 206);
+            this.radioButtonEight.Location = new System.Drawing.Point(21, 238);
             this.radioButtonEight.Name = "radioButtonEight";
             this.radioButtonEight.Size = new System.Drawing.Size(60, 17);
             this.radioButtonEight.TabIndex = 10;
@@ -224,11 +225,31 @@
             this.labelWarning.Text = "Warning.  The Google Authenticator doesn\'t currently support anything except thir" +
     "ty second, six digit codes.  Other third party apps may however.\r\n";
             // 
+            // textBoxIssuer
+            // 
+            this.textBoxIssuer.Location = new System.Drawing.Point(22, 147);
+            this.textBoxIssuer.Name = "textBoxIssuer";
+            this.textBoxIssuer.Size = new System.Drawing.Size(162, 20);
+            this.textBoxIssuer.TabIndex = 13;
+            this.textBoxIssuer.Text = "OtpSharp-Test";
+            this.textBoxIssuer.TextChanged += new System.EventHandler(this.textBoxIssuer_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 131);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Issuer";
+            // 
             // GoogleAuthenticatorTotpTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(432, 538);
+            this.Controls.Add(this.textBoxIssuer);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelWarning);
             this.Controls.Add(this.radioButtonEight);
             this.Controls.Add(this.radioButtonSix);
@@ -273,6 +294,8 @@
         private System.Windows.Forms.RadioButton radioButtonSix;
         private System.Windows.Forms.RadioButton radioButtonEight;
         private System.Windows.Forms.Label labelWarning;
+        private System.Windows.Forms.TextBox textBoxIssuer;
+        private System.Windows.Forms.Label label1;
     }
 }
 
