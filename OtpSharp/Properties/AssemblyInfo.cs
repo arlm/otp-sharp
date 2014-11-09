@@ -35,6 +35,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.2.0.0")]
 
 // allow the test assembly to unit test internals
+#if DEBUG
 [assembly: InternalsVisibleTo("OtpSharp.Tests")]
+#else
+[assembly: InternalsVisibleTo("OtpSharp.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010071121356d82c912fc18de86a39405022615ccd895481f161ea93c95a1e67da067711a31a85e2ce5a145b2d90915d0fea5bddee0e87bef34b212a29216a4596fcbed399ffd0b0b5ce680eda896a73d4b5e9dfb5b6d9218f66705f55fcca2183f4d8bdab93edf20ba247590dbd9c56e7571d4ccaedd269899e4b12693d2c309ea2")]
+#endif
 
 [assembly: CLSCompliant(true)]
