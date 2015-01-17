@@ -1,5 +1,6 @@
 <Query Kind="Statements">
   <Reference>&lt;RuntimeDirectory&gt;\System.Web.dll</Reference>
+  <NuGetReference>Base32</NuGetReference>
   <NuGetReference>OtpSharp</NuGetReference>
   <Namespace>OtpSharp</Namespace>
   <Namespace>System.Web</Namespace>

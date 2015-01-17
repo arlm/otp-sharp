@@ -1,4 +1,5 @@
 <Query Kind="Statements">
+  <NuGetReference>Base32</NuGetReference>
   <NuGetReference>OtpSharp</NuGetReference>
   <Namespace>OtpSharp</Namespace>
 </Query>
