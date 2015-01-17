@@ -38,7 +38,7 @@ using System.Runtime.InteropServices;
 #if DEBUG
 [assembly: InternalsVisibleTo("OtpSharp.Tests")]
 #else
-[assembly: InternalsVisibleTo("OtpSharp.Tests, PublicKeyToken=7e0fd578e444b5f2")]
+[assembly: InternalsVisibleTo("OtpSharp.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100dfee9dc22137af56d87defec35ff3376e4665d10ce3784e4625ffed71f2512eef4831a043c606333f333a732fd4168a58447049b6d58fe4b49522b9c9ac7203d72f44b75a55d44ecbc1691cd361e01b570eec2b538afd1e8e6df3dc3afac811e122fec112b2fc4c4b09aa112643471ae21eb0ca492f178451310baab6ca725a7")]
 #endif
 
 [assembly: CLSCompliant(true)]

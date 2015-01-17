@@ -6,3 +6,4 @@ obj/*
 *.orig
 TestResults
 packages/*
+*.snk
